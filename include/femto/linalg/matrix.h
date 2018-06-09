@@ -3,8 +3,7 @@
 
 #include "femto/util.h"
 
-#define FTO_MAT_IDX(mat, i, j) ((mat)->values[(i) + (mat)->num_rows * (j)])
-
+#define FTO_MAT_IDX(mat, i, j) ((mat)->values[(j) + (mat)->num_cols * (i)])
 
 struct FtoMatrix
 {

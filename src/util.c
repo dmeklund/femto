@@ -14,7 +14,14 @@ void* fto_malloc(size_t sz)
 }
 
 
-enum FtoError fto_err_set_v(enum FtoError err, const char *err_msg, va_list ap)
+void* fto_realloc(void *ptr, const size_t new_sz)
+{
+    void *result = GC_REALLOC(ptr, new_sz);
+    return result;
+}
+
+
+enum FtoError fto_err_set_v(const enum FtoError err, const char *err_msg, va_list ap)
 {
     vsnprintf(_global_error_buf, 255, err_msg, ap);
     _global_error_val = err;
@@ -22,7 +29,7 @@ enum FtoError fto_err_set_v(enum FtoError err, const char *err_msg, va_list ap)
 }
 
 
-enum FtoError fto_err_set(enum FtoError err, const char *err_msg, ...)
+enum FtoError fto_err_set(const enum FtoError err, const char *err_msg, ...)
 {
     enum FtoError ret;
     va_list ap;
@@ -59,5 +66,40 @@ enum FtoError fto_assert_nonnegative(int val)
 enum FtoError fto_assert_lessThan(int val1, int val2)
 {
     if (val1 >= val2) return fto_assert_fail("%d is not less than %d", val1, val2);
+    return FTO_OK;
+}
+
+
+struct FtoArray* fto_array_new()
+{
+    const int default_capacity = 4;
+    struct FtoArray *array = fto_array_new_capacity(default_capacity);
+    return array;
+}
+
+
+struct FtoArray* fto_array_new_capacity(const int capacity)
+{
+    struct FtoArray *array = fto_malloc(sizeof *array);
+    *array = (struct FtoArray){
+        .capacity = capacity,
+        .length = 0,
+        .values = fto_malloc(capacity * sizeof *array->values)
+    };
+}
+
+
+enum FtoError fto_array_append(struct FtoArray *array, void *value)
+{
+    enum FtoError ret;
+    const double scaleFactor = 1.5;
+    if ((ret = fto_assert_nonnegative(array->capacity)) != FTO_OK) return ret;
+    if (array->length == array->capacity)
+    {
+        const int new_capacity = (int)(array->capacity * scaleFactor) + 1;
+        array->values = fto_realloc(array->values, (size_t)new_capacity);
+    }
+    array->values[array->length] = value;
+    array->length += 1;
     return FTO_OK;
 }
