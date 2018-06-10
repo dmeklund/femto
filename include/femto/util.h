@@ -3,9 +3,13 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 #define FTO_C_ORDER_2D_OFFSET(nx, ny, ix, iy) ((iy) + (ny)*(ix))
 #define FTO_C_ORDER_2D_IDX(arr, nx, ny, ix, iy) arr[FTO_C_ORDER_2D_OFFSET(nx, ny, ix, iy)]
+
+#define FTO_DBL_SWAP(x1, x2) {const double tmp = x1; x1 = x2; x2 = tmp;}
+#define FTO_SQUARE(x) ((x)*(x))
 
 enum FtoError
 {
@@ -38,5 +42,6 @@ enum FtoError fto_assert_lessThan(int val1, int val2);
 struct FtoArray* fto_array_new();
 struct FtoArray* fto_array_new_capacity(int capacity);
 enum FtoError fto_array_append(struct FtoArray *array, void *value);
+bool fto_intArray_contains(const int *int_array, int val, int length);
 
 #endif // FTO_UTIL_H

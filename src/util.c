@@ -103,3 +103,14 @@ enum FtoError fto_array_append(struct FtoArray *array, void *value)
     array->length += 1;
     return FTO_OK;
 }
+
+
+bool fto_intArray_contains(const int *int_array, int val, int length)
+{
+    for (size_t ind = 0; ind < length; ++ind)
+    {
+        if (int_array[ind] == val)
+            return true;
+    }
+    return false;
+}
