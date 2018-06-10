@@ -5,15 +5,18 @@ set(
         SOURCE_FILES
         src/basis/piecewise_linear.c
         src/eqn/poisson.c
+        src/geom/point.c
         src/geom/shapes.c
-        src/node/nodeset.c
         src/linalg/matrix.c
         src/mesh/mesh.c
+        src/node/nodeset.c
         src/util.c
-        include/femto/node/nodeset.h
+        include/femto/basis/piecewise_linear.h
+        include/femto/geom/point.h
         include/femto/geom/shapes.h
         include/femto/linalg/matrix.h
         include/femto/mesh/mesh.h
+        include/femto/node/nodeset.h
         include/femto/util.h
 )
 
