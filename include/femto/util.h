@@ -26,6 +26,7 @@ struct FtoArray
 
 // memory allocation
 void* fto_malloc(size_t sz);
+void* fto_malloc_atomic(size_t sz);
 void* fto_realloc(void *ptr, size_t new_sz);
 
 // error handling

@@ -14,6 +14,12 @@ void* fto_malloc(size_t sz)
 }
 
 
+void* fto_malloc_atomic(size_t sz)
+{
+    return GC_MALLOC_ATOMIC(sz);
+}
+
+
 void* fto_realloc(void *ptr, const size_t new_sz)
 {
     void *result = GC_REALLOC(ptr, new_sz);

@@ -3,7 +3,9 @@
 
 enum FtoError fto_mat_new(const int num_rows, const int num_cols, struct FtoMatrix **result_out)
 {
-    struct FtoMatrix *result = fto_malloc(num_rows * num_cols * sizeof(*result->values));
+    enum FtoError ret;
+    struct FtoMatrix *result = fto_malloc(sizeof *result);
+    if ((ret = fto_mat_init(num_rows, num_cols, result)) != FTO_OK) return ret;
     *result_out = result;
     return FTO_OK;
 }
@@ -32,4 +34,15 @@ enum FtoError fto_mat_getval(struct FtoMatrix *mat, int i, int j, double *val_ou
     enum FtoError ret;
     if ((ret = fto_mat_assertValidIndex(mat, i, j)) != FTO_OK) return ret;
     return FTO_MAT_IDX(mat, i, j);
+}
+
+
+enum FtoError fto_mat_init(int num_rows, int num_cols, struct FtoMatrix *result_out)
+{
+    *result_out = (struct FtoMatrix){
+        .num_rows = num_rows,
+        .num_cols = num_cols,
+        .values = fto_malloc_atomic(num_rows * num_cols * sizeof *result_out->values)
+    };
+    return FTO_OK;
 }

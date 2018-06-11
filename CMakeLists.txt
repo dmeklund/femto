@@ -5,6 +5,7 @@ set(
         SOURCE_FILES
         src/basis/piecewise_linear.c
         src/eqn/poisson.c
+        src/fem/stiffness.c
         src/geom/point.c
         src/geom/shapes.c
         src/linalg/matrix.c
@@ -12,6 +13,7 @@ set(
         src/node/nodeset.c
         src/util.c
         include/femto/basis/piecewise_linear.h
+        include/femto/fem/stiffness.h
         include/femto/geom/point.h
         include/femto/geom/shapes.h
         include/femto/linalg/matrix.h
