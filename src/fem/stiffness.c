@@ -1,6 +1,14 @@
 #include "femto/util.h"
 #include "femto/fem/stiffness.h"
 
+static double calculateStiffnessElement(const struct Fto2DMesh *mesh, int triangle_ind, int row, int col)
+{
+    int node_i = mesh->triangles[3*triangle_ind + row];
+    int node_j = mesh->triangles[3*triangle_ind + col];
+
+}
+
+
 extern enum FtoError fto_stiffness_elementMatrix2D(
         const struct Fto2DMesh *mesh,
         int triangle_ind,
@@ -19,12 +27,4 @@ extern enum FtoError fto_stiffness_elementMatrix2D(
         }
     }
     return FTO_OK;
-}
-
-
-static enum FtoError calculateStiffnessElement(const struct Fto2DMesh *mesh, int triangle_ind, int row, int col)
-{
-    int node_i = mesh->triangles[3*triangle_ind + row];
-    int node_j = mesh->triangles[3*triangle_ind + col];
-    
 }
