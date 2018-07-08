@@ -14,7 +14,8 @@
 enum FtoError
 {
     FTO_OK,
-    FTO_ASSERTION_FAILED
+    FTO_ASSERTION_FAILED,
+    FTO_INVALID_ARG
 };
 
 struct FtoArray
@@ -38,6 +39,7 @@ void fto_err_clear();
 enum FtoError fto_assert_fail(const char *err_msg, ...);
 enum FtoError fto_assert_nonnegative(int val);
 enum FtoError fto_assert_lessThan(int val1, int val2);
+enum FtoError fto_assert_greaterThanEqual(int val1, int val2);
 
 // arrays
 struct FtoArray* fto_array_new();

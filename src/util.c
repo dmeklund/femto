@@ -120,3 +120,13 @@ bool fto_intArray_contains(const int *int_array, int val, int length)
     }
     return false;
 }
+
+
+enum FtoError fto_assert_greaterThanEqual(int val1, int val2)
+{
+    if (val1 < val2)
+    {
+        return fto_err_set(FTO_ASSERTION_FAILED, "%d not greater than or equal to %d", val1, val2);
+    }
+    return FTO_OK;
+}

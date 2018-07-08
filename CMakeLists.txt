@@ -4,6 +4,7 @@ project(femto LANGUAGES C)
 set(
         SOURCE_FILES
         src/basis/piecewise_linear.c
+        src/basis/poly.c
         src/eqn/poisson.c
         src/fem/stiffness.c
         src/geom/point.c
@@ -11,7 +12,10 @@ set(
         src/linalg/matrix.c
         src/mesh/mesh.c
         src/node/nodeset.c
+        src/quad/gauss.c
+        src/function.c
         src/util.c
+        include/femto/basis/poly.h
         include/femto/basis/piecewise_linear.h
         include/femto/fem/stiffness.h
         include/femto/geom/point.h
@@ -19,12 +23,16 @@ set(
         include/femto/linalg/matrix.h
         include/femto/mesh/mesh.h
         include/femto/node/nodeset.h
+        include/femto/quad/gauss.h
+        include/femto/function.h
         include/femto/util.h
 )
 
 set(
         LIBRARIES
         gc
+        cmocka
+        m
 )
 
 include_directories(
@@ -33,4 +41,15 @@ include_directories(
 
 add_library(femto SHARED ${SOURCE_FILES})
 target_link_libraries(femto ${LIBRARIES})
+
+set(
+        TEST_FILES
+        test/run_tests.c
+        test/fto_test.h
+        test/quad/test_gauss.c
+        test/quad/test_gauss.h
+)
+
+add_executable(fto_run_tests ${TEST_FILES})
+target_link_libraries(fto_run_tests ${LIBRARIES} femto)
 
