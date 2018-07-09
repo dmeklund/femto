@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -49,6 +50,12 @@ void fto_err_clear()
 {
     _global_error_val = FTO_OK;
     _global_error_buf[0] = '\0';
+}
+
+
+const char* fto_err_get()
+{
+    return _global_error_buf;
 }
 
 
@@ -127,6 +134,27 @@ enum FtoError fto_assert_greaterThanEqual(int val1, int val2)
     if (val1 < val2)
     {
         return fto_err_set(FTO_ASSERTION_FAILED, "%d not greater than or equal to %d", val1, val2);
+    }
+    return FTO_OK;
+}
+
+
+extern bool fto_isClose(double val1, double val2, double rtol, double atol)
+{
+    double diff = fabs(val1 - val2);
+    bool result = (diff <= atol || (val1 != 0 && diff / fabs(val1) <= rtol));
+    return result;
+}
+
+
+extern bool fto_assertClose(double val1, double val2, double rtol, double atol)
+{
+    if (!fto_isClose(val1, val2, rtol, atol))
+    {
+        return fto_err_set(
+                FTO_ASSERTION_FAILED,
+                "Values %g, %g not close within tolerance (abs: %g, rel: %g)",
+                val1, val2, atol, rtol);
     }
     return FTO_OK;
 }

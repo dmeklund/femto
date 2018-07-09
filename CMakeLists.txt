@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(femto LANGUAGES C)
 
+if (CMAKE_COMPILER_IS_GNUCC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -g -O0")
+endif()
+
 set(
         SOURCE_FILES
         src/basis/piecewise_linear.c
@@ -45,6 +49,7 @@ target_link_libraries(femto ${LIBRARIES})
 set(
         TEST_FILES
         test/run_tests.c
+        test/fto_test.c
         test/fto_test.h
         test/quad/test_gauss.c
         test/quad/test_gauss.h

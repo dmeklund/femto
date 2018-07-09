@@ -1,6 +1,8 @@
 #ifndef FTO_UTIL_H
 #define FTO_UTIL_H
 
+#define _GNU_SOURCE /* strcasestr */
+
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -10,6 +12,10 @@
 
 #define FTO_DBL_SWAP(x1, x2) {const double tmp = x1; x1 = x2; x2 = tmp;}
 #define FTO_SQUARE(x) ((x)*(x))
+
+#define FTO_DEFAULT_RTOL 1e-7
+#define FTO_DEFAULT_ATOL 1e-13
+
 
 enum FtoError
 {
@@ -26,25 +32,31 @@ struct FtoArray
 };
 
 // memory allocation
-void* fto_malloc(size_t sz);
-void* fto_malloc_atomic(size_t sz);
-void* fto_realloc(void *ptr, size_t new_sz);
+extern void* fto_malloc(size_t sz);
+extern void* fto_malloc_atomic(size_t sz);
+extern void* fto_realloc(void *ptr, size_t new_sz);
 
 // error handling
-enum FtoError fto_err_set(enum FtoError err, const char *err_msg, ...);
-enum FtoError fto_err_set_v(enum FtoError err, const char *err_msg, va_list ap);
-void fto_err_clear();
+extern enum FtoError fto_err_set(enum FtoError err, const char *err_msg, ...);
+extern enum FtoError fto_err_set_v(enum FtoError err, const char *err_msg, va_list ap);
+extern void fto_err_clear();
+extern const char* fto_err_get();
 
 // assertions
-enum FtoError fto_assert_fail(const char *err_msg, ...);
-enum FtoError fto_assert_nonnegative(int val);
-enum FtoError fto_assert_lessThan(int val1, int val2);
-enum FtoError fto_assert_greaterThanEqual(int val1, int val2);
+extern enum FtoError fto_assert_fail(const char *err_msg, ...);
+extern enum FtoError fto_assert_nonnegative(int val);
+extern enum FtoError fto_assert_lessThan(int val1, int val2);
+extern enum FtoError fto_assert_greaterThanEqual(int val1, int val2);
+extern bool fto_assertClose(double val1, double val2, double rtol, double atol);
 
 // arrays
-struct FtoArray* fto_array_new();
-struct FtoArray* fto_array_new_capacity(int capacity);
-enum FtoError fto_array_append(struct FtoArray *array, void *value);
-bool fto_intArray_contains(const int *int_array, int val, int length);
+        extern struct FtoArray* fto_array_new();
+extern struct FtoArray* fto_array_new_capacity(int capacity);
+extern enum FtoError fto_array_append(struct FtoArray *array, void *value);
+extern bool fto_intArray_contains(const int *int_array, int val, int length);
+
+// other utilities
+extern bool fto_isClose(double val1, double val2, double rtol, double atol);
+
 
 #endif // FTO_UTIL_H

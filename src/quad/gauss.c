@@ -4,10 +4,19 @@
 
 const double nodes2[] = {-0.5773502691896257, 0.5773502691896257};
 const double weights2[] = {1, 1};
-const int max_num_nodes = 2;
+const double nodes3[] = {0, -0.7745966692414834, 0.7745966692414834};
+const double weights3[] = {0.8888888888888888, 0.5555555555555556, 0.5555555555555556};
+const double nodes4[] = {-0.3399810435848563, 0.3399810435848563, -0.8611363115940526, 0.8611363115940526};
+const double weights4[] = {0.6521451548625461, 0.6521451548625461, 0.3478548451374538, 0.3478548451374538};
+const double nodes5[] = {0, -0.5384693101056831, 0.5384693101056831, -0.9061798459386640, 0.9061798459386640};
+const double weights5[] = {0.5688888888888889, 0.4786286704993665, 0.4786286704993665, 0.2369268850561891, 0.2369268850561891};
+const double nodes6[] = {-0.6612093864662645, 0.6612093864662645, -0.2386191860831969, 0.2386191860831969, -0.9324695142031521, 0.9324695142031521};
+const double weights6[] = {0.3607615730481386, 0.3607615730481386, 0.4679139345726910, 0.4679139345726910, 0.1713244923791704, 0.1713244923791704};
+const int max_num_nodes = 6;
 const int min_num_nodes = 2;
-const double *all_nodes[] = {nodes2};
-const double *all_weights[] = {weights2};
+const double *all_nodes[] = {nodes2, nodes3, nodes4, nodes5, nodes6};
+const double *all_weights[] = {weights2, weights3, weights4, weights5, weights6};
+
 
 static enum FtoError getNodesAndWeights(int num_nodes, const double **nodes_out, const double **weights_out)
 {
@@ -22,6 +31,7 @@ static enum FtoError getNodesAndWeights(int num_nodes, const double **nodes_out,
     *weights_out = all_weights[num_nodes-min_num_nodes];
     return FTO_OK;
 }
+
 
 extern enum FtoError fto_gauss_integrate1d(struct FtoGeneric1DFunc *func, double a, double b, int num_nodes, double *result_out)
 {
@@ -38,4 +48,5 @@ extern enum FtoError fto_gauss_integrate1d(struct FtoGeneric1DFunc *func, double
     }
     result *= (b-a) / 2;
     *result_out = result;
+    return FTO_OK;
 }

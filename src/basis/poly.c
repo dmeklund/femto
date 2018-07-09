@@ -25,7 +25,7 @@ extern double fto_basis_poly1d_eval(const struct FtoPoly1D *poly, double pt_x)
 {
     double result = 0;
     double mult = 1;
-    for (size_t coeff_ind = 0; coeff_ind < poly->order; ++coeff_ind)
+    for (size_t coeff_ind = 0; coeff_ind <= poly->order; ++coeff_ind)
     {
         result += poly->coeffs[coeff_ind] * mult;
         mult *= pt_x;
