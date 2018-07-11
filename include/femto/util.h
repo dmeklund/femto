@@ -2,6 +2,7 @@
 #define FTO_UTIL_H
 
 #define _GNU_SOURCE /* strcasestr */
+#define __PURE_INTEL_C99_HEADERS__
 
 #include <stdlib.h>
 #include <stdarg.h>

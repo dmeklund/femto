@@ -1,5 +1,6 @@
 #include "femto/util.h"
 #include "femto/quad/gauss.h"
+#include "femto/geom/shapes.h"
 
 
 const double nodes2[] = {-0.5773502691896257, 0.5773502691896257};
@@ -33,6 +34,24 @@ static enum FtoError getNodesAndWeights(int num_nodes, const double **nodes_out,
 }
 
 
+static double transform2dNodeToXY(const double *node, const struct Fto2DTriangle *triangle, double *x_out, double *y_out)
+{
+    const double xi = node[0];
+    const double eta = node[1];
+    const double n1 = 1-xi-eta;
+    const double n2 = xi;
+    const double n3 = eta;
+    *x_out = triangle->point1->x * n1 + triangle->point2->x * n2 + triangle->point3->x * n3;
+    *y_out = triangle->point1->y * n1 + triangle->point2->y * n2 + triangle->point3->y * n3;
+}
+
+
+static enum FtoError getNodesAndWeights2d(int num_nodes, const double **nodes_out, const double **weights_out)
+{
+    return FTO_OK;
+}
+
+
 extern enum FtoError fto_gauss_integrate1d(struct FtoGeneric1DFunc *func, double a, double b, int num_nodes, double *result_out)
 {
     enum FtoError ret;
@@ -48,5 +67,30 @@ extern enum FtoError fto_gauss_integrate1d(struct FtoGeneric1DFunc *func, double
     }
     result *= (b-a) / 2;
     *result_out = result;
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_gauss_integrate2d_triangle(
+        struct FtoGeneric2DFunc *func,
+        struct Fto2DTriangle *triangle,
+        int num_nodes,
+        double *result_out)
+{
+    enum FtoError ret;
+    const double *nodes;
+    const double *weights;
+    if ((ret = getNodesAndWeights2d(num_nodes, &nodes, &weights)) != FTO_OK) return ret;
+    double result = 0;
+    const double triangle_area = 0;
+    for (int node_ind = 0; node_ind < num_nodes; ++node_ind)
+    {
+        double evaled[2];
+        const double *node = &nodes[2*node_ind];
+        double x, y;
+        transform2dNodeToXY(node, triangle, &x, &y);
+        if ((ret = fto_function_eval2d(func, x, y, evaled)) != FTO_OK) return ret;
+        result += triangle_area;
+    }
     return FTO_OK;
 }

@@ -1,10 +1,11 @@
+#include "femto/util.h"
+
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 
 #include <gc.h>
 
-#include "femto/util.h"
 
 static char _global_error_buf[255] = {'\0'};
 static enum FtoError _global_error_val = FTO_OK;
