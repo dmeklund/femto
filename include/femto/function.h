@@ -3,10 +3,13 @@
 
 #include "femto/basis/poly.h"
 
-//typedef double (*Fto1DFunc)(double x);
+typedef double (*Fto1DFunctionPtr)(double x);
+typedef double (*Fto2DFunctionPtr)(double x, double y);
+
 enum FtoFunctionType
 {
-    FTO_POLYNOMIAL
+    FTO_POLYNOMIAL,
+    FTO_FUNC_PTR
 };
 
 struct FtoGeneric1DFunc
