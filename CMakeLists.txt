@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 project(femto LANGUAGES C)
 
-if (CMAKE_COMPILER_IS_GNUCC)
+if (${CMAKE_C_COMPILER_ID} MATCHES GNU)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -g -O0")
+elseif (${CMAKE_C_COMPILER_ID} MATCHES Intel)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wremarks")
 endif()
+
+message(${CMAKE_C_COMPILER_ID})
 
 set(
         SOURCE_FILES

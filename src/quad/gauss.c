@@ -34,7 +34,7 @@ static enum FtoError getNodesAndWeights(int num_nodes, const double **nodes_out,
 }
 
 
-static double transform2dNodeToXY(const double *node, const struct Fto2DTriangle *triangle, double *x_out, double *y_out)
+static enum FtoError transform2dNodeToXY(const double *node, const struct Fto2DTriangle *triangle, double *x_out, double *y_out)
 {
     const double xi = node[0];
     const double eta = node[1];
@@ -43,6 +43,7 @@ static double transform2dNodeToXY(const double *node, const struct Fto2DTriangle
     const double n3 = eta;
     *x_out = triangle->point1->x * n1 + triangle->point2->x * n2 + triangle->point3->x * n3;
     *y_out = triangle->point1->y * n1 + triangle->point2->y * n2 + triangle->point3->y * n3;
+    return FTO_OK;
 }
 
 
@@ -82,7 +83,7 @@ extern enum FtoError fto_gauss_integrate2d_triangle(
     const double *weights;
     if ((ret = getNodesAndWeights2d(num_nodes, &nodes, &weights)) != FTO_OK) return ret;
     double result = 0;
-    const double triangle_area = 0;
+    const double triangle_area = fto_2dtriangle_area(triangle);
     for (int node_ind = 0; node_ind < num_nodes; ++node_ind)
     {
         double evaled[2];
@@ -92,5 +93,6 @@ extern enum FtoError fto_gauss_integrate2d_triangle(
         if ((ret = fto_function_eval2d(func, x, y, evaled)) != FTO_OK) return ret;
         result += triangle_area;
     }
+    *result_out = result;
     return FTO_OK;
 }

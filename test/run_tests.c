@@ -26,7 +26,7 @@ extern int main(int argc, char *argv[])
     }
     struct CMUnitTest *tests = fto_malloc(test_array->length * sizeof *tests);
     size_t actual_count = 0;
-    for (size_t test_ind = 0; test_ind < test_array->length; ++test_ind)
+    for (int test_ind = 0; test_ind < test_array->length; ++test_ind)
     {
         struct CMUnitTest *test = test_array->values[test_ind];
         if (strcasestr(test->name, filter) != NULL)
@@ -45,4 +45,5 @@ extern int main(int argc, char *argv[])
     {
         printf("Error message: %s\n", err_msg);
     }
+    return result;
 }

@@ -17,6 +17,8 @@
 #define FTO_DEFAULT_RTOL 1e-7
 #define FTO_DEFAULT_ATOL 1e-13
 
+#define USE_GC 0
+
 
 enum FtoError
 {

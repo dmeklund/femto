@@ -26,4 +26,5 @@ extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect)
     FTO_C_ORDER_2D_IDX(mesh->triangles, mesh->num_triangles, 3, 1, 0) = 0;
     FTO_C_ORDER_2D_IDX(mesh->triangles, mesh->num_triangles, 3, 1, 1) = 1;
     FTO_C_ORDER_2D_IDX(mesh->triangles, mesh->num_triangles, 3, 1, 2) = 3;
+    return FTO_OK;
 }

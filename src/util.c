@@ -12,20 +12,32 @@ static enum FtoError _global_error_val = FTO_OK;
 
 void* fto_malloc(size_t sz)
 {
+#if USE_GC
     return GC_MALLOC(sz);
+#else
+    return malloc(sz);
+#endif
 }
 
 
 void* fto_malloc_atomic(size_t sz)
 {
+#if USE_GC
     return GC_MALLOC_ATOMIC(sz);
+#else
+   return malloc(sz);
+#endif
 }
 
 
 void* fto_realloc(void *ptr, const size_t new_sz)
 {
+#if USE_GC
     void *result = GC_REALLOC(ptr, new_sz);
     return result;
+#else
+    return realloc(ptr, new_sz);
+#endif
 }
 
 
@@ -100,6 +112,7 @@ struct FtoArray* fto_array_new_capacity(const int capacity)
         .length = 0,
         .values = fto_malloc(capacity * sizeof *array->values)
     };
+    return array;
 }
 
 
@@ -121,7 +134,7 @@ enum FtoError fto_array_append(struct FtoArray *array, void *value)
 
 bool fto_intArray_contains(const int *int_array, int val, int length)
 {
-    for (size_t ind = 0; ind < length; ++ind)
+    for (int ind = 0; ind < length; ++ind)
     {
         if (int_array[ind] == val)
             return true;

@@ -5,7 +5,7 @@ static double calculateStiffnessElement(const struct Fto2DMesh *mesh, int triang
 {
     int node_i = mesh->triangles[3*triangle_ind + row];
     int node_j = mesh->triangles[3*triangle_ind + col];
-
+    return 0;
 }
 
 
