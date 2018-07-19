@@ -13,6 +13,7 @@ set(
         SOURCE_FILES
         src/basis/piecewise_linear.c
         src/basis/poly.c
+        src/calc/diff.c
         src/eqn/poisson.c
         src/fem/stiffness.c
         src/geom/point.c
@@ -25,6 +26,7 @@ set(
         src/util.c
         include/femto/basis/poly.h
         include/femto/basis/piecewise_linear.h
+        include/femto/calc/diff.h
         include/femto/fem/stiffness.h
         include/femto/geom/point.h
         include/femto/geom/shapes.h
