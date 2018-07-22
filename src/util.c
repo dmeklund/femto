@@ -125,3 +125,15 @@ extern bool fto_assertClose(double val1, double val2, double rtol, double atol)
     }
     return FTO_OK;
 }
+
+
+extern bool fto_isClose_default(double val1, double val2)
+{
+    return fto_isClose(val1, val2, FTO_DEFAULT_RTOL, FTO_DEFAULT_ATOL);
+}
+
+
+extern bool fto_nearlyNonNegative(double val)
+{
+    return (val + 1e-8) > 0;
+}

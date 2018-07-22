@@ -92,3 +92,31 @@ extern enum FtoError fto_valueArray_appendCopy(struct FtoValueArray *array, cons
     array->length += 1;
     return FTO_OK;
 }
+
+
+extern int* fto_intArray_new(int length, ...)
+{
+    int *result = fto_malloc_atomic(length * sizeof *result);
+    va_list args;
+    va_start(args, length);
+    for (int element_ind = 0; element_ind < length; ++element_ind)
+    {
+        result[element_ind] = va_arg(args, int);
+    }
+    va_end(args);
+    return result;
+}
+
+
+extern double* fto_doubleArray_new(int length, ...)
+{
+    double *result = fto_malloc_atomic(length * sizeof *result);
+    va_list args;
+    va_start(args, length);
+    for (int element_ind = 0; element_ind < length; ++element_ind)
+    {
+        result[element_ind] = va_arg(args, double);
+    }
+    va_end(args);
+    return result;
+}

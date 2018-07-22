@@ -3,6 +3,7 @@
 
 #include "femto/geom/shapes.h"
 
+
 extern double fto_poly_piecewise_eval2D(struct FtoPolyPiecewise2D *poly, double x, double y)
 {
     for (int chunk_ind = 0; chunk_ind < poly->chunks->length; ++chunk_ind)
@@ -10,7 +11,10 @@ extern double fto_poly_piecewise_eval2D(struct FtoPolyPiecewise2D *poly, double 
         const struct FtoPolyPiecewise2DTriangle *chunk = poly->chunks->values[chunk_ind];
         if (fto_2dtriangle_contains(chunk->triangle, x, y))
         {
-            return fto_poly2d_eval(chunk->poly, x, y);
+            // basis functions currently expect coords xformed to regular triangle
+            double xi, eta;
+            fto_2dtriangle_xformCoordToRegularTriangle(chunk->triangle, x, y, &xi, &eta);
+            return fto_poly2d_eval(chunk->poly, xi, eta);
         }
     }
     return 0;

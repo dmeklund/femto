@@ -1,6 +1,8 @@
 #ifndef FTO_GEOM_SHAPES_H
 #define FTO_GEOM_SHAPES_H
 
+#include "femto/util.h"
+
 #include "femto/geom/point.h"
 
 struct Fto2DTriangle
@@ -20,5 +22,9 @@ extern struct Fto2DTriangle* fto_2dtriangle_new(
 
 extern double fto_2dtriangle_area(const struct Fto2DTriangle *triangle);
 extern bool fto_2dtriangle_contains(const struct Fto2DTriangle *triangle, double x, double y);
+extern void fto_2dtriangle_xformCoordToRegularTriangle(
+        const struct Fto2DTriangle *triangle,
+        double x, double y,
+        double *xi_out, double *eta_out);
 
 #endif // FTO_GEOM_SHAPES_H

@@ -63,7 +63,25 @@ extern bool fto_2dtriangle_contains(const struct Fto2DTriangle *triangle, double
     const double p2y = triangle->point2.y;
     const double p3x = triangle->point3.x;
     const double p3y = triangle->point3.y;
-    const double s = .5/area * (p1y*p3x - p1x*p3y + (p3y-p1y)*x + (p1x - p2x)*y);
-    const double t = .5/area * (p1x*p2y - p1y*p2x + (p1y-p2y)*x + (p2x - p1x)*y);
-    return (s>0 && t>0 && 1-s-t>0);
+    const double lambda1 = .5/area * (p1y*p3x - p1x*p3y + (p3y-p1y)*x + (p1x - p3x)*y);
+    const double lambda2 = .5/area * (p1x*p2y - p1y*p2x + (p1y-p2y)*x + (p2x - p1x)*y);
+    const double lambda3 = 1 - lambda1 - lambda2;
+    return (fto_nearlyNonNegative(lambda1)
+            && fto_nearlyNonNegative(lambda2)
+            && fto_nearlyNonNegative(lambda3));
+}
+
+
+extern void fto_2dtriangle_xformCoordToRegularTriangle(
+        const struct Fto2DTriangle *triangle,
+        double x, double y,
+        double *xi_out, double *eta_out)
+{
+    double area = fto_2dtriangle_area(triangle);
+    *xi_out = .5/area * (
+            (triangle->point3.y - triangle->point1.y) * (x - triangle->point1.x)
+            - (triangle->point3.x - triangle->point1.x) * (y - triangle->point1.y));
+    *eta_out = .5/area * (
+             -(triangle->point2.y - triangle->point1.y) * (x - triangle->point1.x)
+             + (triangle->point2.x - triangle->point1.x) * (y - triangle->point1.y));
 }

@@ -13,6 +13,7 @@ set(
         SOURCE_FILES
         src/basis/piecewise_linear.c
         src/basis/piecewise_poly.c
+        src/basis/set.c
         src/calc/diff.c
         src/eqn/poisson.c
         src/fem/stiffness.c
@@ -61,13 +62,17 @@ target_link_libraries(femto ${LIBRARIES})
 
 set(
         TEST_FILES
+        test/all_tests.h
         test/run_tests.c
         test/fto_test.c
         test/fto_test.h
+        test/basis/test_piecewise_poly.c
+        test/basis/test_piecewise_poly.h
         test/quad/test_gauss.c
         test/quad/test_gauss.h
 )
 
 add_executable(fto_run_tests ${TEST_FILES})
 target_link_libraries(fto_run_tests ${LIBRARIES} femto)
+target_include_directories(fto_run_tests PRIVATE test)
 

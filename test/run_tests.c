@@ -1,6 +1,6 @@
 #include "femto/util.h"
-#include "quad/test_gauss.h"
 #include "fto_test.h"
+#include "all_tests.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -8,6 +8,12 @@
 static void print_help()
 {
     printf("help\n");
+}
+
+static void addAll(struct FtoArray *test_array)
+{
+    AOK(fto_test_quad_gauss_addAll(test_array));
+    AOK(fto_test_basis_piecewisePoly_addAll(test_array));
 }
 
 extern int main(int argc, char *argv[])
@@ -18,7 +24,7 @@ extern int main(int argc, char *argv[])
         print_help();
         exit(1);
     }
-    AOK(fto_test_quad_gauss_addAll(test_array));
+    addAll(test_array);
     const char *filter = "";
     if (argc == 2)
     {

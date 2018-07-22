@@ -47,6 +47,8 @@ extern bool fto_assertClose(double val1, double val2, double rtol, double atol);
 
 // other utilities
 extern bool fto_isClose(double val1, double val2, double rtol, double atol);
+extern bool fto_isClose_default(double val1, double val2);
+extern bool fto_nearlyNonNegative(double val);
 
 
 #endif // FTO_UTIL_H

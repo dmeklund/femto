@@ -5,6 +5,7 @@
 
 #include <setjmp.h>
 #include "cmocka.h"
+#include "femto/util/array.h"
 
 #define FTO_ASSERT(expression) mock_assert((int)(expression), #expression, __FILE__, __LINE__)
 #define AOK(expr) FTO_ASSERT((expr) == FTO_OK);
