@@ -1,6 +1,8 @@
 #include "femto/util.h"
 #include "femto/mesh/mesh.h"
 
+#include "femto/util/array.h"
+
 extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect)
 {
     struct Fto2DMesh *mesh = fto_malloc(sizeof *mesh);
@@ -26,5 +28,45 @@ extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect)
     FTO_C_ORDER_2D_IDX(mesh->triangles, mesh->num_triangles, 3, 1, 0) = 0;
     FTO_C_ORDER_2D_IDX(mesh->triangles, mesh->num_triangles, 3, 1, 1) = 1;
     FTO_C_ORDER_2D_IDX(mesh->triangles, mesh->num_triangles, 3, 1, 2) = 3;
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_2dmesh_constructNodeToTriangleSet(
+        struct Fto2DMesh *mesh,
+        struct Fto2DNodeToTriangleSet *map_out)
+{
+    enum FtoError ret;
+    struct FtoArray *nodeToTriangles = fto_array_new_capacity(mesh->num_nodes);
+    for (int triangle_ind = 0; triangle_ind < mesh->num_triangles; ++triangle_ind)
+    {
+        for (int triangleNode_ind = 0; triangleNode_ind < mesh->num_nodesPerTriangle; ++triangleNode_ind)
+        {
+            const int node_ind = mesh->triangles[mesh->num_nodesPerTriangle*triangle_ind + triangleNode_ind];
+            struct FtoValueArray *node_values = nodeToTriangles->values[node_ind];
+            if (node_values == NULL)
+            {
+                node_values = fto_valueArray_new_capacity(sizeof(int), 1);
+                nodeToTriangles->values[node_ind] = node_values;
+            }
+            if ((ret = fto_valueArray_appendCopy(node_values, &triangle_ind)) != FTO_OK) return ret;
+        }
+    }
+    nodeToTriangles->length = mesh->num_nodes;
+    map_out->nodeToTriangles = nodeToTriangles;
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_2dmesh_getTrianglesForNode(
+        const struct Fto2DNodeToTriangleSet *nodeToTriangles,
+        int node_ind,
+        struct FtoValueArray **triangleInds_out)
+{
+    if (node_ind < 0 || node_ind >= nodeToTriangles->nodeToTriangles->length)
+    {
+        return fto_err_set(FTO_INVALID_ARG, "Invalid node index: %d", node_ind);
+    }
+    *triangleInds_out = nodeToTriangles->nodeToTriangles->values[node_ind];
     return FTO_OK;
 }

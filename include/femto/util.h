@@ -27,13 +27,6 @@ enum FtoError
     FTO_INVALID_ARG
 };
 
-struct FtoArray
-{
-    void **values;
-    int length;
-    int capacity;
-};
-
 // memory allocation
 extern void* fto_malloc(size_t sz);
 extern void* fto_malloc_atomic(size_t sz);
@@ -51,12 +44,6 @@ extern enum FtoError fto_assert_nonnegative(int val);
 extern enum FtoError fto_assert_lessThan(int val1, int val2);
 extern enum FtoError fto_assert_greaterThanEqual(int val1, int val2);
 extern bool fto_assertClose(double val1, double val2, double rtol, double atol);
-
-// arrays
-        extern struct FtoArray* fto_array_new();
-extern struct FtoArray* fto_array_new_capacity(int capacity);
-extern enum FtoError fto_array_append(struct FtoArray *array, void *value);
-extern bool fto_intArray_contains(const int *int_array, int val, int length);
 
 // other utilities
 extern bool fto_isClose(double val1, double val2, double rtol, double atol);

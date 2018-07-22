@@ -96,53 +96,6 @@ enum FtoError fto_assert_lessThan(int val1, int val2)
 }
 
 
-struct FtoArray* fto_array_new()
-{
-    const int default_capacity = 4;
-    struct FtoArray *array = fto_array_new_capacity(default_capacity);
-    return array;
-}
-
-
-struct FtoArray* fto_array_new_capacity(const int capacity)
-{
-    struct FtoArray *array = fto_malloc(sizeof *array);
-    *array = (struct FtoArray){
-        .capacity = capacity,
-        .length = 0,
-        .values = fto_malloc(capacity * sizeof *array->values)
-    };
-    return array;
-}
-
-
-enum FtoError fto_array_append(struct FtoArray *array, void *value)
-{
-    enum FtoError ret;
-    const double scaleFactor = 1.5;
-    if ((ret = fto_assert_nonnegative(array->capacity)) != FTO_OK) return ret;
-    if (array->length == array->capacity)
-    {
-        const int new_capacity = (int)(array->capacity * scaleFactor) + 1;
-        array->values = fto_realloc(array->values, (size_t)new_capacity);
-    }
-    array->values[array->length] = value;
-    array->length += 1;
-    return FTO_OK;
-}
-
-
-bool fto_intArray_contains(const int *int_array, int val, int length)
-{
-    for (int ind = 0; ind < length; ++ind)
-    {
-        if (int_array[ind] == val)
-            return true;
-    }
-    return false;
-}
-
-
 enum FtoError fto_assert_greaterThanEqual(int val1, int val2)
 {
     if (val1 < val2)

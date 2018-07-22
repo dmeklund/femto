@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(femto LANGUAGES C)
 
 if (${CMAKE_C_COMPILER_ID} MATCHES GNU)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -g -O0")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -g -O0 -Wall")
 elseif (${CMAKE_C_COMPILER_ID} MATCHES Intel)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wremarks")
 endif()
@@ -12,6 +12,7 @@ message(${CMAKE_C_COMPILER_ID})
 set(
         SOURCE_FILES
         src/basis/piecewise_linear.c
+        src/basis/piecewise_poly.c
         src/basis/poly.c
         src/calc/diff.c
         src/eqn/poisson.c
@@ -24,8 +25,11 @@ set(
         src/quad/gauss.c
         src/function.c
         src/util.c
+        src/util/array.c
         include/femto/basis/poly.h
         include/femto/basis/piecewise_linear.h
+        include/femto/basis/piecewise_poly.h
+        include/femto/basis/set.h
         include/femto/calc/diff.h
         include/femto/fem/stiffness.h
         include/femto/geom/point.h
@@ -36,6 +40,7 @@ set(
         include/femto/quad/gauss.h
         include/femto/function.h
         include/femto/util.h
+        include/femto/util/array.h
 )
 
 set(
