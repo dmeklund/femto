@@ -5,7 +5,7 @@
 
 struct Fto2DTriangle
 {
-    struct Fto2DPoint *point1, *point2, *point3;
+    struct Fto2DPoint point1, point2, point3;
 };
 
 struct Fto2DRectangle
@@ -14,10 +14,11 @@ struct Fto2DRectangle
 };
 
 extern struct Fto2DTriangle* fto_2dtriangle_new(
-        struct Fto2DPoint *pt1,
-        struct Fto2DPoint *pt2,
-        struct Fto2DPoint *pt3);
+        struct Fto2DPoint pt1,
+        struct Fto2DPoint pt2,
+        struct Fto2DPoint pt3);
 
 extern double fto_2dtriangle_area(const struct Fto2DTriangle *triangle);
+extern bool fto_2dtriangle_contains(const struct Fto2DTriangle *triangle, double x, double y);
 
 #endif // FTO_GEOM_SHAPES_H

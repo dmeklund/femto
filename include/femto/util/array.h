@@ -21,10 +21,12 @@ struct FtoValueArray
 extern struct FtoArray* fto_array_new();
 extern struct FtoArray* fto_array_new_capacity(int capacity);
 extern enum FtoError fto_array_append(struct FtoArray *array, void *value);
-extern bool fto_intArray_contains(const int *int_array, int val, int length);
 
 extern struct FtoValueArray* fto_valueArray_new(size_t element_sz);
 extern struct FtoValueArray* fto_valueArray_new_capacity(size_t element_sz, int capacity);
 extern enum FtoError fto_valueArray_appendCopy(struct FtoValueArray *array, const void *value);
+
+extern bool fto_intArray_contains(const int *int_array, int val, int length);
+extern int fto_intArray_offset(const int *int_array, int val, int length);
 
 #endif /* FTO_UTIL_ARRAY_H */

@@ -3,12 +3,35 @@
 
 #include <math.h>
 
+
+static double calc_2dtriangle_signedArea(
+        const struct Fto2DPoint *pt1,
+        const struct Fto2DPoint *pt2,
+        const struct Fto2DPoint *pt3)
+{
+    const double x1 = pt1->x;
+    const double x2 = pt2->x;
+    const double x3 = pt3->x;
+    const double y1 = pt1->y;
+    const double y2 = pt2->y;
+    const double y3 = pt3->y;
+    return .5 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+}
+
+
 extern struct Fto2DTriangle* fto_2dtriangle_new(
-        struct Fto2DPoint *pt1,
-        struct Fto2DPoint *pt2,
-        struct Fto2DPoint *pt3)
+        struct Fto2DPoint pt1,
+        struct Fto2DPoint pt2,
+        struct Fto2DPoint pt3)
 {
     struct Fto2DTriangle *triangle = fto_malloc(sizeof *triangle);
+//    if (calc_2dtriangle_signedArea(&pt1, &pt2, &pt3) < 0)
+//    {
+//        // make triangle points always counter-clockwise
+//        struct Fto2DPoint tmp = pt1;
+//        pt1 = pt2;
+//        pt2 = tmp;
+//    }
     *triangle = (struct Fto2DTriangle){
         .point1 = pt1,
         .point2 = pt2,
@@ -20,11 +43,27 @@ extern struct Fto2DTriangle* fto_2dtriangle_new(
 
 extern double fto_2dtriangle_area(const struct Fto2DTriangle *triangle)
 {
-    const double x1 = triangle->point1->x;
-    const double x2 = triangle->point2->x;
-    const double x3 = triangle->point3->x;
-    const double y1 = triangle->point1->y;
-    const double y2 = triangle->point2->y;
-    const double y3 = triangle->point3->y;
+    const double x1 = triangle->point1.x;
+    const double x2 = triangle->point2.x;
+    const double x3 = triangle->point3.x;
+    const double y1 = triangle->point1.y;
+    const double y2 = triangle->point2.y;
+    const double y3 = triangle->point3.y;
     return .5 * fabs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+}
+
+
+extern bool fto_2dtriangle_contains(const struct Fto2DTriangle *triangle, double x, double y)
+{
+    // using barycentric coords
+    const double area = calc_2dtriangle_signedArea(&triangle->point1, &triangle->point2, &triangle->point3);
+    const double p1x = triangle->point1.x;
+    const double p1y = triangle->point1.y;
+    const double p2x = triangle->point2.x;
+    const double p2y = triangle->point2.y;
+    const double p3x = triangle->point3.x;
+    const double p3y = triangle->point3.y;
+    const double s = .5/area * (p1y*p3x - p1x*p3y + (p3y-p1y)*x + (p1x - p2x)*y);
+    const double t = .5/area * (p1x*p2y - p1y*p2x + (p1y-p2y)*x + (p2x - p1x)*y);
+    return (s>0 && t>0 && 1-s-t>0);
 }

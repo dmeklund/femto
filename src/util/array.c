@@ -39,14 +39,20 @@ enum FtoError fto_array_append(struct FtoArray *array, void *value)
 }
 
 
-bool fto_intArray_contains(const int *int_array, int val, int length)
+extern int fto_intArray_offset(const int *int_array, int val, int length)
 {
     for (int ind = 0; ind < length; ++ind)
     {
         if (int_array[ind] == val)
-            return true;
+            return ind;
     }
-    return false;
+    return -1;
+}
+
+
+extern bool fto_intArray_contains(const int *int_array, int val, int length)
+{
+    return fto_intArray_offset(int_array, val, length) >= 0;
 }
 
 

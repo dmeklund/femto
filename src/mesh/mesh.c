@@ -70,3 +70,23 @@ extern enum FtoError fto_2dmesh_getTrianglesForNode(
     *triangleInds_out = nodeToTriangles->nodeToTriangles->values[node_ind];
     return FTO_OK;
 }
+
+
+extern enum FtoError fto_2dmesh_toTriangle(
+        const struct Fto2DMesh *mesh,
+        int triangle_ind,
+        struct Fto2DTriangle *triangle_out)
+{
+    if (triangle_ind < 0 || triangle_ind >= mesh->num_triangles)
+        return fto_err_set(FTO_INVALID_ARG, "Invalid triangle index: %d", triangle_ind);
+    int *triangleNodes = &mesh->triangles[2*triangle_ind];
+    double *node1 = &mesh->nodes[2*triangleNodes[0]];
+    double *node2 = &mesh->nodes[2*triangleNodes[1]];
+    double *node3 = &mesh->nodes[2*triangleNodes[2]];
+    *triangle_out = (struct Fto2DTriangle){
+        .point1 = {.x = node1[0], .y = node1[1]},
+        .point2 = {.x = node2[0], .y = node2[1]},
+        .point3 = {.x = node3[0], .y = node3[1]}
+    };
+    return FTO_OK;
+}

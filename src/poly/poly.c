@@ -1,11 +1,11 @@
 #include "femto/util.h"
-#include "femto/basis/poly.h"
+#include "femto/poly/poly.h"
 
 #include <math.h>
 #include <stdarg.h>
 
 
-extern enum FtoError fto_basis_poly1d_init(struct FtoPoly1D *poly, int order, ...)
+extern enum FtoError fto_poly1d_init(struct FtoPoly1D *poly, int order, ...)
 {
     enum FtoError ret;
     if ((ret = fto_assert_greaterThanEqual(order, 0)) != FTO_OK) return ret;
@@ -22,7 +22,7 @@ extern enum FtoError fto_basis_poly1d_init(struct FtoPoly1D *poly, int order, ..
 }
 
 
-extern enum FtoError fto_basis_poly2d_init(struct FtoPoly2D *poly, int num_elements, ...)
+extern enum FtoError fto_poly2d_init(struct FtoPoly2D *poly, int num_elements, ...)
 {
     poly->coeffs = fto_malloc_atomic(num_elements * sizeof *poly->coeffs);
     poly->orders = fto_malloc_atomic(2*num_elements * sizeof *poly->orders);
@@ -40,7 +40,7 @@ extern enum FtoError fto_basis_poly2d_init(struct FtoPoly2D *poly, int num_eleme
 }
 
 
-extern double fto_basis_poly1d_eval(const struct FtoPoly1D *poly, double pt_x)
+extern double fto_poly1d_eval(const struct FtoPoly1D *poly, double pt_x)
 {
     double result = 0;
     double mult = 1;
@@ -53,7 +53,7 @@ extern double fto_basis_poly1d_eval(const struct FtoPoly1D *poly, double pt_x)
 }
 
 
-extern enum FtoError fto_basis_poly1d_diff(const struct FtoPoly1D *poly, struct FtoPoly1D *diff_poly_out)
+extern enum FtoError fto_poly1d_diff(const struct FtoPoly1D *poly, struct FtoPoly1D *diff_poly_out)
 {
     diff_poly_out->order = poly->order - 1;
     diff_poly_out->coeffs = fto_malloc_atomic((diff_poly_out->order + 1) * sizeof *diff_poly_out->coeffs);
@@ -65,7 +65,7 @@ extern enum FtoError fto_basis_poly1d_diff(const struct FtoPoly1D *poly, struct 
 }
 
 
-extern double fto_basis_poly2d_eval(const struct FtoPoly2D *poly, const double pt_x, const double pt_y)
+extern double fto_poly2d_eval(const struct FtoPoly2D *poly, double pt_x, double pt_y)
 {
     double result = 0;
     for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
@@ -78,7 +78,7 @@ extern double fto_basis_poly2d_eval(const struct FtoPoly2D *poly, const double p
 }
 
 
-extern enum FtoError fto_basis_poly2d_diff(const struct FtoPoly2D *poly, int axis, struct FtoPoly2D *diff_poly_out)
+extern enum FtoError fto_poly2d_diff(const struct FtoPoly2D *poly, int axis, struct FtoPoly2D *diff_poly_out)
 {
     double *coeffs = fto_malloc_atomic(poly->num_elements * sizeof *coeffs);
     int *orders = fto_malloc_atomic(2*poly->num_elements * sizeof *orders);
@@ -104,7 +104,7 @@ extern enum FtoError fto_basis_poly2d_diff(const struct FtoPoly2D *poly, int axi
 }
 
 
-extern enum FtoError fto_basis_poly2d_mult(
+extern enum FtoError fto_poly2d_mult(
         const struct FtoPoly2D *poly1, const struct FtoPoly2D *poly2, struct FtoPoly2D *poly_out)
 {
     // currently makes no attempt at combining like terms

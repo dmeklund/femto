@@ -30,5 +30,9 @@ extern enum FtoError fto_2dmesh_getTrianglesForNode(
         const struct Fto2DNodeToTriangleSet *nodeToTriangles,
         int node_ind,
         struct FtoValueArray **triangleInds_out);
+extern enum FtoError fto_2dmesh_toTriangle(
+        const struct Fto2DMesh *mesh,
+        int triangle_ind,
+        struct Fto2DTriangle *triangle_out);
 
 #endif // FTO_MESH_H

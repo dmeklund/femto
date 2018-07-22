@@ -41,8 +41,8 @@ static enum FtoError transform2dNodeToXY(const double *node, const struct Fto2DT
     const double n1 = 1-xi-eta;
     const double n2 = xi;
     const double n3 = eta;
-    *x_out = triangle->point1->x * n1 + triangle->point2->x * n2 + triangle->point3->x * n3;
-    *y_out = triangle->point1->y * n1 + triangle->point2->y * n2 + triangle->point3->y * n3;
+    *x_out = triangle->point1.x * n1 + triangle->point2.x * n2 + triangle->point3.x * n3;
+    *y_out = triangle->point1.y * n1 + triangle->point2.y * n2 + triangle->point3.y * n3;
     return FTO_OK;
 }
 
