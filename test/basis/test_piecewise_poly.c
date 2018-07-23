@@ -26,8 +26,22 @@ extern void fto_test_basis_piecewisePoly_construct(void **state)
     struct FtoBasisSet *set = fto_malloc(sizeof *set);
     AOK(fto_basis_piecewisePoly_construct(mesh, nodeToTriangles, poly_order, set));
     struct FtoGenericFunc *func = fto_malloc(sizeof *func);
-    AOK(fto_basis_set_getBasisFunctionForNode(set, 0, func));
     double val;
-    AOK(fto_function_eval2d(func, pt1.x, pt1.y, &val));
-    FTO_ASSERT(fto_isClose_default(val, 1));
+    const struct Fto2DPoint points[] = {pt1, pt2, pt3};
+    for (int ind1 = 0; ind1 < 3; ++ind1)
+    {
+        AOK(fto_basis_set_getBasisFunctionForNode(set, ind1, func));
+        for (int ind2 = 0; ind2 < 3; ++ind2)
+        {
+            AOK(fto_function_eval2d(func, points[ind2].x, points[ind2].y, &val));
+            if (ind1 == ind2)
+            {
+                FTO_ASSERT(fto_isClose_default(val, 1));
+            }
+            else
+            {
+                FTO_ASSERT(fto_isClose_default(val, 0));
+            }
+        }
+    }
 }

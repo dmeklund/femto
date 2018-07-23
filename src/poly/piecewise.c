@@ -4,7 +4,7 @@
 #include "femto/geom/shapes.h"
 
 
-extern double fto_poly_piecewise_eval2D(struct FtoPolyPiecewise2D *poly, double x, double y)
+extern double fto_poly_piecewise_eval2D(const struct FtoPolyPiecewise2D *poly, double x, double y)
 {
     for (int chunk_ind = 0; chunk_ind < poly->chunks->length; ++chunk_ind)
     {

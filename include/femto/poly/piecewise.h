@@ -19,7 +19,7 @@ struct FtoPolyPiecewise2D
     struct FtoArray *chunks;
 };
 
-extern double fto_poly_piecewise_eval2D(struct FtoPolyPiecewise2D *poly, double x, double y);
+extern double fto_poly_piecewise_eval2D(const struct FtoPolyPiecewise2D *poly, double x, double y);
 extern enum FtoError fto_poly_piecewise_chunkFromTriangle(
         const struct Fto2DTriangle *triangle,
         int node_offset,

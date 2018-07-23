@@ -11,7 +11,7 @@ struct FtoBasisSet
 };
 
 extern enum FtoError fto_basis_set_getBasisFunctionForNode(
-        struct FtoBasisSet *set,
+        const struct FtoBasisSet *set,
         int node_ind,
         struct FtoGenericFunc *func_out);
 

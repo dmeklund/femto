@@ -3,6 +3,7 @@
     <words>
       <w>coeffs</w>
       <w>inds</w>
+      <w>ndims</w>
     </words>
   </dictionary>
 </component>
