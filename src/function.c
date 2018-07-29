@@ -65,6 +65,14 @@ extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, doub
         if ((ret = fto_function_eval2d(data->func2, x_pt, y_pt, &val2)) != FTO_OK) return ret;
         result = val1 * val2;
     }
+    else if (func->type == FTO_FUNC_COMBINE_ADD_2D)
+    {
+        const struct FtoCombinedFuncData *data = func->state;
+        double val1, val2;
+        if ((ret = fto_function_eval2d(data->func1, x_pt, y_pt, &val1)) != FTO_OK) return ret;
+        if ((ret = fto_function_eval2d(data->func2, x_pt, y_pt, &val2)) != FTO_OK) return ret;
+        result = val1 + val2;
+    }
     else
     {
         return fto_err_set(FTO_INVALID_ARG, "Invalid function type: %d", func->type);
@@ -74,27 +82,54 @@ extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, doub
 }
 
 
-//extern enum FtoError fto_function_dot(struct FtoVectorFunc *func1, struct FtoVectorFunc *func2)
-//{
-//    if (func1->order != func2->order)
-//    {
-//        return fto_err_set(
-//                FTO_INVALID_ARG,
-//                "Can't dot product vector functions of different order: (%d, %d)",
-//                func1->order, func2->order);
-//    }
-//    return FTO_OK;
-//}
-
-
-extern enum FtoError fto_function_mult(const struct FtoGenericFunc *func1, const struct FtoGenericFunc *func2, struct FtoGenericFunc *func_out)
+extern enum FtoError fto_function_dot(
+        struct FtoVectorFunc *func1,
+        struct FtoVectorFunc *func2,
+        struct FtoGenericFunc *dot_out)
 {
     enum FtoError ret;
+    if (func1->order != func2->order)
+    {
+        return fto_err_set(
+                FTO_INVALID_ARG,
+                "Can't dot product vector functions of different order: (%d, %d)",
+                func1->order, func2->order);
+    }
+    struct FtoGenericFunc *result = NULL;
+    for (int dim = 0; dim < func1->order; ++dim)
+    {
+        struct FtoGenericFunc *prod;
+        if ((ret = fto_function_mult(&func1->funcs[dim], &func2->funcs[dim], &prod)) != FTO_OK) return ret;
+        if (result == NULL)
+        {
+            result = prod;
+        }
+        else
+        {
+            if ((ret = fto_function_add(result, prod, &result)) != FTO_OK) return ret;
+        }
+    }
+    if (result == NULL)
+    {
+        return fto_err_set(FTO_INVALID_ARG, "Invalid function of order 0");
+    }
+    *dot_out = *result;
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_function_mult(
+        const struct FtoGenericFunc *func1,
+        const struct FtoGenericFunc *func2,
+        struct FtoGenericFunc **func_out)
+{
+    enum FtoError ret;
+    struct FtoGenericFunc *result = fto_malloc(sizeof *func_out);
     if (func1->type == FTO_POLYNOMIAL_2D && func2->type == FTO_POLYNOMIAL_2D)
     {
         struct FtoPoly2D *poly_result = fto_malloc(sizeof *poly_result);
         if ((ret = fto_poly2d_mult(func1->state, func2->state, poly_result)) != FTO_OK) return ret;
-        if ((ret = fto_function_fromPoly2D(poly_result, func_out)) != FTO_OK) return ret;
+        if ((ret = fto_function_fromPoly2D(poly_result, result)) != FTO_OK) return ret;
     }
     else
     {
@@ -113,14 +148,57 @@ extern enum FtoError fto_function_mult(const struct FtoGenericFunc *func1, const
                 .func1 = func1,
                 .func2 = func2
             };
-            *func_out = (struct FtoGenericFunc){
+            *result = (struct FtoGenericFunc){
                 .type = FTO_FUNC_COMBINE_MULTIPLY_2D,
                 .state = combined
             };
         }
     }
+    *func_out = result;
     return FTO_OK;
 }
+
+
+extern enum FtoError fto_function_add(
+        const struct FtoGenericFunc *func1,
+        const struct FtoGenericFunc *func2,
+        struct FtoGenericFunc **func_out)
+{
+    enum FtoError ret;
+    struct FtoGenericFunc *result = fto_malloc(sizeof *result);
+    if (func1->type == FTO_POLYNOMIAL_2D && func2->type == FTO_POLYNOMIAL_2D)
+    {
+        struct FtoPoly2D *poly_result = fto_malloc(sizeof *poly_result);
+        if ((ret = fto_poly2d_add(func1->state, func2->state, poly_result)) != FTO_OK) return ret;
+        if ((ret = fto_function_fromPoly2D(poly_result, result)) != FTO_OK) return ret;
+    }
+    else
+    {
+        int ndims = fto_function_ndims(func1);
+        if (ndims != fto_function_ndims(func2))
+        {
+            return fto_err_set(
+                    FTO_INVALID_ARG,
+                    "Cannot multiply functions with different dimensions: %d, %d",
+                    ndims, fto_function_ndims(func2));
+        }
+        if (ndims == 2)
+        {
+            struct FtoCombinedFuncData *combined = fto_malloc(sizeof *combined);
+            *combined = (struct FtoCombinedFuncData){
+                    .func1 = func1,
+                    .func2 = func2
+            };
+            *result = (struct FtoGenericFunc){
+                    .type = FTO_FUNC_COMBINE_ADD_2D,
+                    .state = combined
+            };
+        }
+    }
+    *func_out = result;
+    return FTO_OK;
+}
+
 
 
 extern enum FtoError fto_function_fromPolyPiecewise2D(struct FtoPolyPiecewise2D *poly, struct FtoGenericFunc *func_out)
@@ -144,6 +222,7 @@ extern int fto_function_ndims(const struct FtoGenericFunc *func)
         case FTO_POLY_PIECEWISE_2D:
         case FTO_FUNC_PTR_2D:
         case FTO_FUNC_COMBINE_MULTIPLY_2D:
+        case FTO_FUNC_COMBINE_ADD_2D:
             return 2;
     }
     return -1;

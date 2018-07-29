@@ -31,6 +31,12 @@ extern double fto_poly2d_eval(const struct FtoPoly2D *poly, double pt_x, double 
 extern enum FtoError fto_poly2d_diff(
         const struct FtoPoly2D *poly, int axis, struct FtoPoly2D *diff_poly_out);
 extern enum FtoError fto_poly2d_mult(
-        const struct FtoPoly2D *poly1, const struct FtoPoly2D *poly2, struct FtoPoly2D *poly_out);
+        const struct FtoPoly2D *poly1,
+        const struct FtoPoly2D *poly2,
+        struct FtoPoly2D *poly_out);
+extern enum FtoError fto_poly2d_add(
+        const struct FtoPoly2D *poly1,
+        const struct FtoPoly2D *poly2,
+        struct FtoPoly2D *poly_out);
 
 #endif /* FTO_BASIS_POLY_H */

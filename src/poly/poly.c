@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <stdarg.h>
+#include <string.h>
 
 
 extern enum FtoError fto_poly1d_init(struct FtoPoly1D *poly, int order, ...)
@@ -111,7 +112,7 @@ extern enum FtoError fto_poly2d_mult(
     int num_elements = poly1->num_elements * poly2->num_elements;
     int element_offset = 0;
     double *coeffs = fto_malloc_atomic(num_elements * sizeof *coeffs);
-    int *orders = fto_malloc_atomic(2*num_elements * sizeof *coeffs);
+    int *orders = fto_malloc_atomic(2*num_elements * sizeof *orders);
     for (int element_ind1 = 0; element_ind1 < poly1->num_elements; ++element_ind1)
     {
         for (int element_ind2 = 0; element_ind2 < poly2->num_elements; ++element_ind2)
@@ -127,5 +128,21 @@ extern enum FtoError fto_poly2d_mult(
         .orders = orders,
         .coeffs = coeffs
     };
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_poly2d_add(
+        const struct FtoPoly2D *poly1,
+        const struct FtoPoly2D *poly2,
+        struct FtoPoly2D *poly_out)
+{
+    int num_elements = poly1->num_elements + poly2->num_elements;
+    double *coeffs = fto_malloc_atomic(num_elements * sizeof *coeffs);
+    int *orders = fto_malloc_atomic(2*num_elements * sizeof *orders);
+    memcpy(coeffs, poly1->coeffs, poly1->num_elements * sizeof *coeffs);
+    memcpy(orders, poly1->orders, 2*poly1->num_elements * sizeof *orders);
+    memcpy(coeffs + poly1->num_elements, poly2->coeffs, poly2->num_elements * sizeof *coeffs);
+    memcpy(orders + 2*poly1->num_elements, poly2->orders, 2*poly2->num_elements * sizeof *orders);
     return FTO_OK;
 }
