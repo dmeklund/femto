@@ -68,6 +68,8 @@ set(
         test/fto_test.h
         test/basis/test_piecewise_poly.c
         test/basis/test_piecewise_poly.h
+        test/fem/test_stiffness.c
+        test/fem/test_stiffness.h
         test/quad/test_gauss.c
         test/quad/test_gauss.h
 )

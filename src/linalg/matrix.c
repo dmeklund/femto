@@ -21,6 +21,7 @@ enum FtoError fto_mat_assertValidIndex(const struct FtoMatrix *mat, int i, int j
     return FTO_OK;
 }
 
+
 enum FtoError fto_mat_setval(struct FtoMatrix *mat, int i, int j, double val)
 {
     enum FtoError ret;
@@ -28,6 +29,16 @@ enum FtoError fto_mat_setval(struct FtoMatrix *mat, int i, int j, double val)
     FTO_MAT_IDX(mat, i, j) = val;
     return FTO_OK;
 }
+
+
+enum FtoError fto_mat_plusEquals(struct FtoMatrix *mat, int i, int j, double val)
+{
+    enum FtoError ret;
+    if ((ret = fto_mat_assertValidIndex(mat, i, j)) != FTO_OK) return ret;
+    FTO_MAT_IDX(mat, i, j) += val;
+    return FTO_OK;
+}
+
 
 
 enum FtoError fto_mat_getval(struct FtoMatrix *mat, int i, int j, double *val_out)
