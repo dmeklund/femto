@@ -200,7 +200,6 @@ extern enum FtoError fto_function_add(
 }
 
 
-
 extern enum FtoError fto_function_fromPolyPiecewise2D(struct FtoPolyPiecewise2D *poly, struct FtoGenericFunc *func_out)
 {
     *func_out = (struct FtoGenericFunc){

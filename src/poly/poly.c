@@ -144,5 +144,10 @@ extern enum FtoError fto_poly2d_add(
     memcpy(orders, poly1->orders, 2*poly1->num_elements * sizeof *orders);
     memcpy(coeffs + poly1->num_elements, poly2->coeffs, poly2->num_elements * sizeof *coeffs);
     memcpy(orders + 2*poly1->num_elements, poly2->orders, 2*poly2->num_elements * sizeof *orders);
+    *poly_out = (struct FtoPoly2D){
+        .num_elements = num_elements,
+        .orders = orders,
+        .coeffs = coeffs
+    };
     return FTO_OK;
 }
