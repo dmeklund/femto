@@ -24,8 +24,11 @@ enum FtoError
 {
     FTO_OK,
     FTO_ASSERTION_FAILED,
-    FTO_INVALID_ARG
+    FTO_INVALID_ARG,
+    FTO_NULL
 };
+
+#define FTO_RAISE_SIGTRAP 0
 
 // memory allocation
 extern void* fto_malloc(size_t sz);
@@ -44,6 +47,7 @@ extern enum FtoError fto_assert_nonnegative(int val);
 extern enum FtoError fto_assert_lessThan(int val1, int val2);
 extern enum FtoError fto_assert_greaterThanEqual(int val1, int val2);
 extern bool fto_assertClose(double val1, double val2, double rtol, double atol);
+extern enum FtoError fto_assert_notNull(const void *ptr);
 
 // other utilities
 extern bool fto_isClose(double val1, double val2, double rtol, double atol);

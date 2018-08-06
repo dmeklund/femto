@@ -94,6 +94,18 @@ extern enum FtoError fto_valueArray_appendCopy(struct FtoValueArray *array, cons
 }
 
 
+
+extern enum FtoError fto_valueArray_get(struct FtoValueArray *array, int index, void *value_out)
+{
+    if (index < 0 || index >= array->length)
+    {
+        return fto_err_set(FTO_INVALID_ARG, "Index out of range: %d", index);
+    }
+    memcpy(value_out, array->values + index*array->element_sz, array->element_sz);
+    return FTO_OK;
+}
+
+
 extern int* fto_intArray_new(int length, ...)
 {
     int *result = fto_malloc_atomic(length * sizeof *result);
@@ -120,3 +132,5 @@ extern double* fto_doubleArray_new(int length, ...)
     va_end(args);
     return result;
 }
+
+

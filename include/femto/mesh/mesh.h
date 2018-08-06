@@ -26,7 +26,7 @@ struct Fto2DNodeToTriangleSet
 
 extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect, struct Fto2DMesh *mesh_out);
 extern enum FtoError fto_2dmesh_fromTriangle(struct Fto2DTriangle *triangle, struct Fto2DMesh *mesh_out);
-extern enum FtoError fto_2dmesh_constructNodeToTriangleSet(struct Fto2DMesh *mesh, struct Fto2DNodeToTriangleSet *map_out);
+extern enum FtoError fto_2dmesh_constructNodeToTriangleSet(const struct Fto2DMesh *mesh, struct Fto2DNodeToTriangleSet *map_out);
 extern enum FtoError fto_2dmesh_getTrianglesForNode(
         const struct Fto2DNodeToTriangleSet *nodeToTriangles,
         int node_ind,

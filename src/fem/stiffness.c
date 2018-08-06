@@ -6,32 +6,35 @@
 #include "femto/quad/gauss.h"
 #include "femto/mesh/mesh.h"
 
-static double calculateStiffnessElement(
+static enum FtoError calculateStiffnessElement(
         const struct Fto2DMesh *mesh,
         const struct FtoBasisSet *basis_set,
         int triangle_ind,
         int offset1,
-        int offset2)
+        int offset2,
+        double *val_out)
 {
+    enum FtoError ret;
     int node_i = mesh->triangles[mesh->num_nodesPerTriangle*triangle_ind + offset1];
     int node_j = mesh->triangles[mesh->num_nodesPerTriangle*triangle_ind + offset2];
     struct FtoGenericFunc basis1, basis2, *func_mult;
     // calculate the H^1 scalar product: integral over triangle of vw + v'w', where v and w are the basis functions
-    fto_basis_set_getBasisFunctionForNode(basis_set, node_i, &basis1);
-    fto_basis_set_getBasisFunctionForNode(basis_set, node_j, &basis2);
-    fto_function_mult(&basis1, &basis2, &func_mult);
+    if ((ret = fto_basis_set_getBasisFunctionForNode(basis_set, node_i, &basis1)) != FTO_OK) return ret;
+    if ((ret = fto_basis_set_getBasisFunctionForNode(basis_set, node_j, &basis2)) != FTO_OK) return ret;
+    if ((ret = fto_function_mult(&basis1, &basis2, &func_mult)) != FTO_OK) return ret;
     struct FtoVectorFunc grad1, grad2;
-    fto_calc_grad(&basis1, &grad1);
-    fto_calc_grad(&basis2, &grad2);
+    if ((ret = fto_calc_grad(&basis1, &grad1)) != FTO_OK) return ret;
+    if ((ret = fto_calc_grad(&basis2, &grad2)) != FTO_OK) return ret;
     struct FtoGenericFunc dot_prod;
-    fto_function_dot(&grad2, &grad2, &dot_prod);
+    if ((ret = fto_function_dot(&grad2, &grad2, &dot_prod)) != FTO_OK) return ret;
     struct FtoGenericFunc *integrand;
-    fto_function_add(&dot_prod, func_mult, &integrand);
+    if ((ret = fto_function_add(&dot_prod, func_mult, &integrand)) != FTO_OK) return ret;
     double result;
     struct Fto2DTriangle triangle;
-    fto_2dmesh_toTriangle(mesh, triangle_ind, &triangle);
-    fto_gauss_integrate2d_triangle(integrand, &triangle, 3, &result);
-    return result;
+    if ((ret = fto_2dmesh_toTriangle(mesh, triangle_ind, &triangle)) != FTO_OK) return ret;
+    if ((ret = fto_gauss_integrate2d_triangle(integrand, &triangle, 3, &result)) != FTO_OK) return ret;
+    *val_out = result;
+    return FTO_OK;
 }
 
 
@@ -48,7 +51,8 @@ extern enum FtoError fto_stiffness_elementMatrix2D(
     {
         for (int col = 0; col < mesh->num_nodesPerTriangle; ++col)
         {
-            const double a_jk = calculateStiffnessElement(mesh, basis_set, triangle_ind, row, col);
+            double a_jk;
+            if ((ret = calculateStiffnessElement(mesh, basis_set, triangle_ind, row, col, &a_jk)) != FTO_OK) return ret;
             // todo: represent symmetric matrices
             if ((ret = fto_mat_setval(matrix_out, row, col, a_jk)) != FTO_OK) return ret;
             if ((ret = fto_mat_setval(matrix_out, col, row, a_jk)) != FTO_OK) return ret;

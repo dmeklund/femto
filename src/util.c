@@ -1,6 +1,7 @@
 #include "femto/util.h"
 
 #include <math.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -52,6 +53,9 @@ enum FtoError fto_err_set_v(const enum FtoError err, const char *err_msg, va_lis
 enum FtoError fto_err_set(const enum FtoError err, const char *err_msg, ...)
 {
     enum FtoError ret;
+#if FTO_RAISE_SIGTRAP > 0
+    raise(SIGTRAP);
+#endif
     va_list ap;
     va_start(ap, err_msg);
     ret = fto_err_set_v(err, err_msg, ap);
@@ -84,7 +88,8 @@ enum FtoError fto_assert_fail(const char *err_msg, ...)
 
 enum FtoError fto_assert_nonnegative(int val)
 {
-    if (val < 0) return fto_assert_fail("Value is negative: %d", val);
+    if (val < 0)
+        return fto_assert_fail("Value is negative: %d", val);
     return FTO_OK;
 }
 
@@ -136,4 +141,14 @@ extern bool fto_isClose_default(double val1, double val2)
 extern bool fto_nearlyNonNegative(double val)
 {
     return (val + 1e-8) > 0;
+}
+
+
+extern enum FtoError fto_assert_notNull(const void *ptr)
+{
+    if (ptr == NULL)
+    {
+        return fto_err_set(FTO_NULL, "Value is NULL");
+    }
+    return FTO_OK;
 }

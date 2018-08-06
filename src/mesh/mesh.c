@@ -10,6 +10,7 @@ extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect, struc
     *mesh_out = (struct Fto2DMesh){
         .num_nodes = num_nodes,
         .num_triangles = num_triangles,
+        .num_nodesPerTriangle = 3,
         .nodes = fto_malloc(num_nodes * sizeof *mesh_out->nodes),
         .triangles = fto_malloc(num_triangles * sizeof *mesh_out->triangles)
     };
@@ -32,7 +33,7 @@ extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect, struc
 
 
 extern enum FtoError fto_2dmesh_constructNodeToTriangleSet(
-        struct Fto2DMesh *mesh,
+        const struct Fto2DMesh *mesh,
         struct Fto2DNodeToTriangleSet *map_out)
 {
     enum FtoError ret;

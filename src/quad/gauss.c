@@ -18,6 +18,26 @@ const int min_num_nodes = 2;
 const double *all_nodes[] = {nodes2, nodes3, nodes4, nodes5, nodes6};
 const double *all_weights[] = {weights2, weights3, weights4, weights5, weights6};
 
+const double nodes1_2d[] = {1.0/3, 1.0/3};
+const double weights1_2d[] = {1.0};
+const double nodes3_2d[] = {
+        1.0/6, 1.0/6,
+        2.0/3, 1.0/6,
+        1.0/6, 2.0/3
+};
+const double weights3_2d[] = {1.0/3, 1.0/3, 1.0/3};
+const double nodes4_2d[] = {
+        1.0/3, 1.0/3,
+        1.0/5, 1.0/5,
+        1.0/5, 3.0/5,
+        3.0/5, 1.0/5
+};
+const double weights4_2d[] = {-27.0/48, 25.0/48, 25.0/48, 25.0/48};
+const int max_num_nodes_2d = 4;
+const int min_num_nodes_2d = 1;
+const double *all_nodes2d[] = {nodes1_2d, NULL, nodes3_2d, nodes4_2d};
+const double *all_weights2d[] = {weights1_2d, NULL, weights3_2d, weights4_2d};
+
 
 static enum FtoError getNodesAndWeights(int num_nodes, const double **nodes_out, const double **weights_out)
 {
@@ -49,10 +69,12 @@ static enum FtoError transform2dNodeToXY(const double *node, const struct Fto2DT
 
 static enum FtoError getNodesAndWeights2d(int num_nodes, const double **nodes_out, const double **weights_out)
 {
-    // FIXME
-    (void)num_nodes;
-    (void)nodes_out;
-    (void)weights_out;
+    if (num_nodes < min_num_nodes_2d || num_nodes > max_num_nodes_2d || all_nodes2d[num_nodes-min_num_nodes_2d] == NULL)
+    {
+        return fto_err_set(FTO_INVALID_ARG, "Invalid number of 2D nodes: %d", num_nodes);
+    }
+    *nodes_out = all_nodes2d[num_nodes-min_num_nodes_2d];
+    *weights_out = all_weights2d[num_nodes-min_num_nodes_2d];
     return FTO_OK;
 }
 

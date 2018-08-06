@@ -85,3 +85,14 @@ extern void fto_2dtriangle_xformCoordToRegularTriangle(
              -(triangle->point2.y - triangle->point1.y) * (x - triangle->point1.x)
              + (triangle->point2.x - triangle->point1.x) * (y - triangle->point1.y));
 }
+
+
+extern struct Fto2DRectangle* fto_2drectangle_new(const struct Fto2DPoint *corner1, const struct Fto2DPoint *corner2)
+{
+    struct Fto2DRectangle *rect = fto_malloc(sizeof *rect);
+    *rect = (struct Fto2DRectangle){
+        .corner1 = corner1,
+        .corner2 = corner2
+    };
+    return rect;
+}

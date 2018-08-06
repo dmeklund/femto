@@ -4,7 +4,7 @@ project(femto LANGUAGES C)
 if (${CMAKE_C_COMPILER_ID} MATCHES GNU)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -g -O0 -Wall")
 elseif (${CMAKE_C_COMPILER_ID} MATCHES Intel)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wremarks")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wremarks -O0 -g")
 endif()
 
 message(${CMAKE_C_COMPILER_ID})

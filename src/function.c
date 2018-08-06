@@ -55,7 +55,7 @@ extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, doub
     }
     else if (func->type == FTO_POLY_PIECEWISE_2D)
     {
-        result = fto_poly_piecewise_eval2D(func->state, x_pt, y_pt);
+        result = fto_poly_piecewise2d_eval(func->state, x_pt, y_pt);
     }
     else if (func->type == FTO_FUNC_COMBINE_MULTIPLY_2D)
     {

@@ -4,7 +4,7 @@
 #include "femto/geom/shapes.h"
 
 
-extern double fto_poly_piecewise_eval2D(const struct FtoPolyPiecewise2D *poly, double x, double y)
+extern double fto_poly_piecewise2d_eval(const struct FtoPolyPiecewise2D *poly, double x, double y)
 {
     for (int chunk_ind = 0; chunk_ind < poly->chunks->length; ++chunk_ind)
     {
@@ -21,7 +21,7 @@ extern double fto_poly_piecewise_eval2D(const struct FtoPolyPiecewise2D *poly, d
 }
 
 
-extern enum FtoError fto_poly_piecewise_chunkFromTriangle(
+extern enum FtoError fto_poly_piecewise2d_chunkFromTriangle(
         const struct Fto2DTriangle *triangle,
         int node_offset,
         struct FtoPolyPiecewise2DTriangle *chunk_out)
@@ -52,5 +52,26 @@ extern enum FtoError fto_poly_piecewise_chunkFromTriangle(
         .triangle = triangle,
         .poly = poly
     };
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_poly_piecewise2d_diff(
+        const struct FtoPolyPiecewise2D *poly,
+        int axis,
+        struct FtoPolyPiecewise2D *diff_out)
+{
+    enum FtoError ret;
+    diff_out->chunks = fto_array_new_capacity(poly->chunks->length);
+    for (int chunk_ind = 0; chunk_ind < poly->chunks->length; ++chunk_ind)
+    {
+        const struct FtoPolyPiecewise2DTriangle *chunk = poly->chunks->values[chunk_ind];
+        struct FtoPoly2D *chunk_diff = fto_malloc(sizeof *chunk_diff);
+        if ((ret = fto_poly2d_diff(chunk->poly, axis, chunk_diff)) != FTO_OK) return ret;
+        struct FtoPolyPiecewise2DTriangle *new_chunk = fto_malloc(sizeof *new_chunk);
+        new_chunk->triangle = chunk->triangle;
+        new_chunk->poly = chunk_diff;
+        if ((ret = fto_array_append(diff_out->chunks, new_chunk)) != FTO_OK) return ret;
+    }
     return FTO_OK;
 }

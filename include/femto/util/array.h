@@ -25,6 +25,7 @@ extern enum FtoError fto_array_append(struct FtoArray *array, void *value);
 extern struct FtoValueArray* fto_valueArray_new(size_t element_sz);
 extern struct FtoValueArray* fto_valueArray_new_capacity(size_t element_sz, int capacity);
 extern enum FtoError fto_valueArray_appendCopy(struct FtoValueArray *array, const void *value);
+extern enum FtoError fto_valueArray_get(struct FtoValueArray *array, int index, void *value_out);
 
 // numeric arrays
 extern bool fto_intArray_contains(const int *int_array, int val, int length);

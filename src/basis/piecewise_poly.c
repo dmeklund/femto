@@ -4,6 +4,7 @@
 #include "femto/util/array.h"
 #include "femto/poly/piecewise.h"
 #include "femto/poly/poly.h"
+#include "femto/mesh/mesh.h"
 
 
 extern enum FtoError fto_basis_piecewisePoly_construct(
@@ -17,21 +18,30 @@ extern enum FtoError fto_basis_piecewisePoly_construct(
     {
         return fto_err_set(FTO_INVALID_ARG, "Unsupported polynomial order: %d", poly_order);
     }
+    if (nodeToTriangles == NULL)
+    {
+        struct Fto2DNodeToTriangleSet *toTriangles = fto_malloc(sizeof *nodeToTriangles);
+        if ((ret = fto_2dmesh_constructNodeToTriangleSet(mesh, toTriangles)) != FTO_OK) return ret;
+        nodeToTriangles = toTriangles;
+    }
     struct FtoArray *basis_functions = fto_array_new_capacity(mesh->num_nodes);
     for (int node_ind = 0; node_ind < mesh->num_nodes; ++node_ind)
     {
         struct FtoValueArray *triangles;
         if ((ret = fto_2dmesh_getTrianglesForNode(nodeToTriangles, node_ind, &triangles)) != FTO_OK) return ret;
+        if ((ret = fto_assert_notNull(triangles)) != FTO_OK) return ret;
         struct FtoArray *chunks = fto_array_new();
         for (int triangle_ind = 0; triangle_ind < triangles->length; ++triangle_ind)
         {
+            int mesh_triangle_ind;
+            if ((ret = fto_valueArray_get(triangles, triangle_ind, &mesh_triangle_ind)) != FTO_OK) return ret;
             struct Fto2DTriangle *triangle = fto_malloc(sizeof *triangle);
-            const int *node_offsets = &mesh->triangles[mesh->num_nodesPerTriangle*triangle_ind];
+            const int *node_offsets = &mesh->triangles[mesh->num_nodesPerTriangle*mesh_triangle_ind];
             const int node_offset = fto_intArray_offset(node_offsets, node_ind, mesh->num_nodesPerTriangle);
             if ((ret = fto_assert_nonnegative(node_offset)) != FTO_OK) return ret;
-            if ((ret = fto_2dmesh_toTriangle(mesh, triangle_ind, triangle)) != FTO_OK) return ret;
+            if ((ret = fto_2dmesh_toTriangle(mesh, mesh_triangle_ind, triangle)) != FTO_OK) return ret;
             struct FtoPolyPiecewise2DTriangle *chunk = fto_malloc(sizeof *chunk);
-            if ((ret = fto_poly_piecewise_chunkFromTriangle(triangle, node_offset, chunk)) != FTO_OK) return ret;
+            if ((ret = fto_poly_piecewise2d_chunkFromTriangle(triangle, node_offset, chunk)) != FTO_OK) return ret;
             if ((ret = fto_array_append(chunks, chunk)) != FTO_OK) return ret;
         }
         struct FtoPolyPiecewise2D *poly = fto_malloc(sizeof *poly);
