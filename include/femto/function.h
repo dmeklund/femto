@@ -26,6 +26,16 @@ struct FtoGenericFunc
     const void *state;
 };
 
+struct Fto1DFunction
+{
+    Fto1DFunctionPtr function;
+};
+
+struct Fto2DFunction
+{
+    Fto2DFunctionPtr function;
+};
+
 struct FtoCombinedFuncData
 {
     const struct FtoGenericFunc *func1, *func2;

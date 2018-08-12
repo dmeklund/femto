@@ -88,7 +88,7 @@ extern enum FtoError fto_valueArray_appendCopy(struct FtoValueArray *array, cons
         const int new_capacity = (int)(array->capacity * scaleFactor) + 1;
         array->values = fto_realloc(array->values, (size_t)new_capacity * array->element_sz);
     }
-    memcpy(array->values + array->element_sz*array->length, value, array->element_sz);
+    memcpy((char*)array->values + array->element_sz*array->length, value, array->element_sz);
     array->length += 1;
     return FTO_OK;
 }
@@ -101,7 +101,7 @@ extern enum FtoError fto_valueArray_get(struct FtoValueArray *array, int index, 
     {
         return fto_err_set(FTO_INVALID_ARG, "Index out of range: %d", index);
     }
-    memcpy(value_out, array->values + index*array->element_sz, array->element_sz);
+    memcpy(value_out, (char*)array->values + index*array->element_sz, array->element_sz);
     return FTO_OK;
 }
 

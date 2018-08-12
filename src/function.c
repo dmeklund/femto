@@ -12,8 +12,8 @@ extern enum FtoError fto_function_eval1d(const struct FtoGenericFunc *func, doub
     }
     else if (func->type == FTO_FUNC_PTR_1D)
     {
-        Fto1DFunctionPtr func_ptr = func->state;
-        result = func_ptr(x_pt);
+        const struct Fto1DFunction *func_struct = func->state;
+        result = func_struct->function(x_pt);
     }
     else
     {
@@ -46,8 +46,8 @@ extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, doub
     double result;
     if (func->type == FTO_FUNC_PTR_2D)
     {
-        Fto2DFunctionPtr func_ptr = func->state;
-        result = func_ptr(x_pt, y_pt);
+        const struct Fto2DFunction *func_struct = func->state;
+        result = func_struct->function(x_pt, y_pt);
     }
     else if (func->type == FTO_POLYNOMIAL_2D)
     {
