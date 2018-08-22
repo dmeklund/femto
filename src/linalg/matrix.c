@@ -1,6 +1,8 @@
 #include "femto/util.h"
 #include "femto/linalg/matrix.h"
 
+#include <stdio.h>
+
 enum FtoError fto_mat_new(const int num_rows, const int num_cols, struct FtoMatrix **result_out)
 {
     enum FtoError ret;
@@ -41,7 +43,7 @@ enum FtoError fto_mat_plusEquals(struct FtoMatrix *mat, int i, int j, double val
 
 
 
-enum FtoError fto_mat_getval(struct FtoMatrix *mat, int i, int j, double *val_out)
+enum FtoError fto_mat_getval(const struct FtoMatrix *mat, int i, int j, double *val_out)
 {
     enum FtoError ret;
     if ((ret = fto_mat_assertValidIndex(mat, i, j)) != FTO_OK) return ret;
@@ -57,5 +59,22 @@ enum FtoError fto_mat_init(int num_rows, int num_cols, struct FtoMatrix *result_
         .num_cols = num_cols,
         .values = fto_malloc_atomic(num_rows * num_cols * sizeof *result_out->values)
     };
+    return FTO_OK;
+}
+
+
+enum FtoError fto_mat_print(const struct FtoMatrix *mat)
+{
+    enum FtoError ret;
+    for (int row = 0; row < mat->num_rows; ++row)
+    {
+        for (int col = 0; col < mat->num_cols; ++col)
+        {
+            double val;
+            if ((ret = fto_mat_getval(mat, row, col, &val)) != FTO_OK) return ret;
+            printf("%g ", val);
+        }
+        printf("\n");
+    }
     return FTO_OK;
 }

@@ -15,4 +15,6 @@ extern enum FtoError fto_basis_set_getBasisFunctionForNode(
         int node_ind,
         struct FtoGenericFunc *func_out);
 
+extern enum FtoError fto_basis_set_print(const struct FtoBasisSet *set);
+
 #endif /* FEMTO_BASIS_SET_H */

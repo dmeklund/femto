@@ -13,10 +13,12 @@ struct FtoMatrix
 };
 
 enum FtoError fto_mat_setval(struct FtoMatrix *mat, int i, int j, double val);
-enum FtoError fto_mat_getval(struct FtoMatrix *mat, int i, int j, double *val_out);
+enum FtoError fto_mat_getval(const struct FtoMatrix *mat, int i, int j, double *val_out);
 enum FtoError fto_mat_plusEquals(struct FtoMatrix *mat, int i, int j, double val);
 enum FtoError fto_mat_new(int num_rows, int num_cols, struct FtoMatrix **result_out);
 enum FtoError fto_mat_init(int num_rows, int num_cols, struct FtoMatrix *result_out);
 enum FtoError fto_mat_assertValidIndex(const struct FtoMatrix *mat, int i, int j);
+
+enum FtoError fto_mat_print(const struct FtoMatrix *mat);
 
 #endif // FTO_LINALG_H

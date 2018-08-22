@@ -29,5 +29,6 @@ extern enum FtoError fto_poly_piecewise2d_chunkFromTriangle(
         int node_offset,
         struct FtoPolyPiecewise2DTriangle *chunk_out);
 
+extern enum FtoError fto_poly_piecewise2d_print(const struct FtoPolyPiecewise2D *poly);
 
 #endif /* FTO_POLY_PIECEWISE_H */

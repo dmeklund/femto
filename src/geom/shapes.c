@@ -2,6 +2,7 @@
 #include "femto/geom/shapes.h"
 
 #include <math.h>
+#include <stdio.h>
 
 
 static double calc_2dtriangle_signedArea(
@@ -20,9 +21,9 @@ static double calc_2dtriangle_signedArea(
 
 
 extern struct Fto2DTriangle* fto_2dtriangle_new(
-        struct Fto2DPoint pt1,
-        struct Fto2DPoint pt2,
-        struct Fto2DPoint pt3)
+        const struct Fto2DPoint pt1,
+        const struct Fto2DPoint pt2,
+        const struct Fto2DPoint pt3)
 {
     struct Fto2DTriangle *triangle = fto_malloc(sizeof *triangle);
 //    if (calc_2dtriangle_signedArea(&pt1, &pt2, &pt3) < 0)
@@ -95,4 +96,17 @@ extern struct Fto2DRectangle* fto_2drectangle_new(const struct Fto2DPoint *corne
         .corner2 = corner2
     };
     return rect;
+}
+
+
+extern enum FtoError fto_2dtriangle_print(const struct Fto2DTriangle *triangle)
+{
+    enum FtoError ret;
+    printf("Triangle(");
+    if ((ret = fto_2dpoint_print(triangle->point1)) != FTO_OK) return ret;
+    printf(", ");
+    if ((ret = fto_2dpoint_print(triangle->point2)) != FTO_OK) return ret;
+    printf(", ");
+    if ((ret = fto_2dpoint_print(triangle->point3)) != FTO_OK) return ret;
+    return FTO_OK;
 }

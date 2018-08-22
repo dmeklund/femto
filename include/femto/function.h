@@ -66,4 +66,6 @@ extern enum FtoError fto_function_add(
         struct FtoGenericFunc **func_out);
 extern int fto_function_ndims(const struct FtoGenericFunc *func);
 
+extern enum FtoError fto_function_print(const struct FtoGenericFunc *func);
+
 #endif /* FTO_FUNCTION_H */

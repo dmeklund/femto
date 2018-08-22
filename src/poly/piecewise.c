@@ -3,6 +3,8 @@
 
 #include "femto/geom/shapes.h"
 
+#include <stdio.h>
+
 
 extern double fto_poly_piecewise2d_eval(const struct FtoPolyPiecewise2D *poly, double x, double y)
 {
@@ -72,6 +74,22 @@ extern enum FtoError fto_poly_piecewise2d_diff(
         new_chunk->triangle = chunk->triangle;
         new_chunk->poly = chunk_diff;
         if ((ret = fto_array_append(diff_out->chunks, new_chunk)) != FTO_OK) return ret;
+    }
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_poly_piecewise2d_print(const struct FtoPolyPiecewise2D *poly)
+{
+    enum FtoError ret;
+    for (int chunk_ind = 0; chunk_ind < poly->chunks->length; ++chunk_ind)
+    {
+        const struct FtoPolyPiecewise2DTriangle *chunk = poly->chunks->values[chunk_ind];
+        if ((ret = fto_poly2d_print(chunk->poly)) != FTO_OK) return ret;
+        printf(" in ");
+        if ((ret = fto_2dtriangle_print(chunk->triangle)) != FTO_OK) return ret;
+        if (chunk_ind < poly->chunks->length-1)
+            printf(", ");
     }
     return FTO_OK;
 }

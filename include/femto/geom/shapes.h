@@ -28,4 +28,6 @@ extern void fto_2dtriangle_xformCoordToRegularTriangle(
         double x, double y,
         double *xi_out, double *eta_out);
 
+extern enum FtoError fto_2dtriangle_print(const struct Fto2DTriangle *triangle);
+
 #endif // FTO_GEOM_SHAPES_H

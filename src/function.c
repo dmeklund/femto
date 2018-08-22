@@ -226,3 +226,21 @@ extern int fto_function_ndims(const struct FtoGenericFunc *func)
     }
     return -1;
 }
+
+
+extern enum FtoError fto_function_print(const struct FtoGenericFunc *func)
+{
+    enum FtoError ret;
+    switch (func->type)
+    {
+        case FTO_POLYNOMIAL_2D:
+            if ((ret = fto_poly2d_print(func->state)) != FTO_OK) return ret;
+            break;
+        case FTO_POLY_PIECEWISE_2D:
+            if ((ret = fto_poly_piecewise2d_print(func->state)) != FTO_OK) return ret;
+            break;
+        default:
+            return fto_err_set(FTO_INVALID_ARG, "Can't print function of type %d", func->type);
+    }
+    return FTO_OK;
+}

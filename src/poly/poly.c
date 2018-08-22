@@ -3,8 +3,8 @@
 
 #include <math.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
-
 
 extern enum FtoError fto_poly1d_init(struct FtoPoly1D *poly, int order, ...)
 {
@@ -151,3 +151,17 @@ extern enum FtoError fto_poly2d_add(
     };
     return FTO_OK;
 }
+
+
+extern enum FtoError fto_poly2d_print(const struct FtoPoly2D *poly)
+{
+    for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
+    {
+        printf("%g x^%d y^%d", poly->coeffs[element_ind], poly->orders[2*element_ind], poly->orders[2*element_ind+1]);
+        if (element_ind < poly->num_elements-1)
+            printf(" + ");
+    }
+    return FTO_OK;
+}
+
+
