@@ -165,3 +165,27 @@ extern enum FtoError fto_poly2d_print(const struct FtoPoly2D *poly)
 }
 
 
+extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly)
+{
+    for (int ind1 = 0; ind1 < poly->num_elements; ++ind1)
+    {
+        for (int ind2 = ind1+1; ind2 < poly->num_elements; ++ind2)
+        {
+            if (poly->orders[2*ind1] == poly->orders[2*ind2] && poly->orders[2*ind1+1] == poly->orders[2*ind1+2])
+            {
+                poly->coeffs[ind1] += poly->coeffs[ind2];
+                poly->coeffs[ind2] = 0;
+            }
+        }
+    }
+    int copyFrom_ind = 0;
+    for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
+    {
+        while (poly->coeffs[copyFrom_ind] == 0)
+        {
+            ++copyFrom_ind;
+            poly->num_elements -= 1;
+        }
+    }
+    return FTO_OK;
+}

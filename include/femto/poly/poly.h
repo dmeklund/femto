@@ -38,6 +38,7 @@ extern enum FtoError fto_poly2d_add(
         const struct FtoPoly2D *poly1,
         const struct FtoPoly2D *poly2,
         struct FtoPoly2D *poly_out);
+extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly);
 
 extern enum FtoError fto_poly2d_print(const struct FtoPoly2D *poly);
 

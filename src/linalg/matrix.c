@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+
 enum FtoError fto_mat_new(const int num_rows, const int num_cols, struct FtoMatrix **result_out)
 {
     enum FtoError ret;

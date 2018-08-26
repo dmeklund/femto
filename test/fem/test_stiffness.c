@@ -17,6 +17,7 @@ extern enum FtoError fto_test_fem_stiffness_addAll(struct FtoArray *tests)
 
 extern void fto_test_fem_stiffness_calculateStiffnessMatrix2D(void **state)
 {
+    (void)state;
     struct Fto2DMesh *mesh = fto_malloc(sizeof *mesh);
 //    struct Fto2DRectangle *rect = fto_2drectangle_new(fto_2dpoint_new(0, 0), fto_2dpoint_new(1, 1));
 //    AOK(fto_2dmesh_fromRectangle(rect, mesh));
@@ -29,7 +30,6 @@ extern void fto_test_fem_stiffness_calculateStiffnessMatrix2D(void **state)
     struct FtoMatrix *stiffness = fto_malloc(sizeof *stiffness);
     AOK(fto_stiffness_calculateStiffnessMatrix2D(mesh, basis_set, stiffness));
     AOK(fto_mat_print(stiffness));
-    (void)state;
 }
 
 
