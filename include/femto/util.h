@@ -25,7 +25,8 @@ enum FtoError
     FTO_OK,
     FTO_ASSERTION_FAILED,
     FTO_INVALID_ARG,
-    FTO_NULL
+    FTO_NULL,
+    FTO_ILLEGAL_OP
 };
 
 #define FTO_RAISE_SIGTRAP 0

@@ -30,21 +30,22 @@ extern enum FtoError fto_poly_piecewise2d_chunkFromTriangle(
 {
     // note: for now this creates a polynomial that evaluates on the regular triangle (0,0),(0,1),(1,0) and expects
     // the caller to xform the coordinates appropriately
+    enum FtoError ret;
     struct FtoPoly2D *poly = fto_malloc(sizeof *poly);
     if (node_offset == 0)
     {
         // 1 - xi - eta
-        fto_poly2d_init(poly, 3, 1.0, 0, 0, -1.0, 1, 0, -1.0, 0, 1);
+        if ((ret = fto_poly2d_init(poly, 3, 1.0, 0, 0, -1.0, 1, 0, -1.0, 0, 1)) != FTO_OK) return ret;
     }
     else if (node_offset == 1)
     {
         // eta
-        fto_poly2d_init(poly, 1, 1.0, 1, 0);
+        if ((ret = fto_poly2d_init(poly, 1, 1.0, 1, 0)) != FTO_OK) return ret;
     }
     else if (node_offset == 2)
     {
         // xi
-        fto_poly2d_init(poly, 1, 1.0, 0, 1);
+        if ((ret = fto_poly2d_init(poly, 1, 1.0, 0, 1)) != FTO_OK) return ret;
     }
     else
     {

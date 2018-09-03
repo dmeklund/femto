@@ -30,6 +30,14 @@ extern enum FtoError fto_poly2d_init(struct FtoPoly2D *poly, int num_elements, .
 extern double fto_poly2d_eval(const struct FtoPoly2D *poly, double pt_x, double pt_y);
 extern enum FtoError fto_poly2d_diff(
         const struct FtoPoly2D *poly, int axis, struct FtoPoly2D *diff_poly_out);
+/**
+ * Multiply two polynomials together and assign the result to poly_out. poly1 can equal poly2, and poly_mult can equal
+ * poly1 or poly2.
+ * @param poly1
+ * @param poly2
+ * @param poly_out
+ * @return
+ */
 extern enum FtoError fto_poly2d_mult(
         const struct FtoPoly2D *poly1,
         const struct FtoPoly2D *poly2,
@@ -38,6 +46,23 @@ extern enum FtoError fto_poly2d_add(
         const struct FtoPoly2D *poly1,
         const struct FtoPoly2D *poly2,
         struct FtoPoly2D *poly_out);
+extern enum FtoError fto_poly2d_scale(struct FtoPoly2D *poly, double scale);
+extern enum FtoError fto_poly2d_ipow(const struct FtoPoly2D *poly, int pow, struct FtoPoly2D *poly_out);
+extern bool fto_poly2d_iszero(const struct FtoPoly2D *poly);
+/**
+ * Substitutes existing variables with new variables, xnew and ynew.
+ * @param poly The existing polynomial, in coordinates xold and yold.
+ * @param xold The "xold" variable in terms of the new variables, xnew and ynew
+ * @param yold The "yold" variable in terms of the new variables, xnew and ynew
+ * @param poly_out The new polynomial, in terms of xnew and ynew.
+ * @return
+ */
+extern enum FtoError fto_poly2d_substitute(
+        const struct FtoPoly2D *poly,
+        const struct FtoPoly2D *xold,
+        const struct FtoPoly2D *yold,
+        struct FtoPoly2D *poly_out
+);
 extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly);
 
 extern enum FtoError fto_poly2d_print(const struct FtoPoly2D *poly);

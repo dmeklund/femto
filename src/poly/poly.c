@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <femto/util/array.h>
 
 extern enum FtoError fto_poly1d_init(struct FtoPoly1D *poly, int order, ...)
 {
@@ -188,4 +189,88 @@ extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly)
         }
     }
     return FTO_OK;
+}
+
+
+/**
+ * Substitutes existing variables with new variables, xnew and ynew.
+ * @param poly The existing polynomial, in coordinates xold and yold.
+ * @param xold The "xold" variable in terms of the new variables, xnew and ynew
+ * @param yold The "yold" variable in terms of the new variables, xnew and ynew
+ * @param poly_out The new polynomial, in terms of xnew and ynew.
+ * @return
+ */
+extern enum FtoError fto_poly2d_substitute(
+        const struct FtoPoly2D *poly,
+        const struct FtoPoly2D *xold,
+        const struct FtoPoly2D *yold,
+        struct FtoPoly2D *poly_out)
+{
+    enum FtoError ret;
+    poly_out->num_elements = 0;
+    for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
+    {
+        struct FtoPoly2D *element_poly_x = fto_malloc(sizeof *element_poly_x);
+        int order_x = poly->orders[2*element_ind];
+        int order_y = poly->orders[2*element_ind+1];
+        if ((ret = fto_poly2d_ipow(xold, order_x, element_poly_x)) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_scale(element_poly_x, poly->coeffs[element_ind])) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_add(poly_out, element_poly_x, element_poly_x)) != FTO_OK) return ret;
+        struct FtoPoly2D *element_poly_y = fto_malloc(sizeof *element_poly_y);
+        if ((ret = fto_poly2d_ipow(yold, order_y, element_poly_y)) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_scale(element_poly_y, poly->coeffs[element_ind])) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_add(poly_out, element_poly_y, element_poly_y)) != FTO_OK) return ret;
+    }
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_poly2d_scale(struct FtoPoly2D *poly, const double scale)
+{
+    for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
+    {
+        poly->coeffs[element_ind] *= scale;
+    }
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_poly2d_ipow(const struct FtoPoly2D *poly, int pow, struct FtoPoly2D *poly_out)
+{
+    enum FtoError ret;
+    if (pow < 0)
+    {
+        return fto_err_set(FTO_INVALID_ARG, "fto_poly2d_ipow only supports non-negative integers");
+    }
+    if (pow == 0)
+    {
+        if (fto_poly2d_iszero(poly))
+        {
+            return fto_err_set(FTO_ILLEGAL_OP, "Zero taken to zeroth power");
+        }
+        *poly_out = (struct FtoPoly2D){
+            .num_elements = 1,
+            .coeffs = fto_doubleArray_new(1, 1.0),
+            .orders = fto_intArray_new(2, 0, 0)
+        };
+        return FTO_OK;
+    }
+    *poly_out = *poly;
+    for (int count = 1; count < pow; ++count)
+    {
+        if ((ret = fto_poly2d_mult(poly_out, poly, poly_out)) != FTO_OK) return ret;
+    }
+    return FTO_OK;
+}
+
+
+extern bool fto_poly2d_iszero(const struct FtoPoly2D *poly)
+{
+    if (poly->num_elements == 0) return true;
+    for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
+    {
+        if (fabs(poly->coeffs[element_ind]) > 0)
+            return false;
+    }
+    return true;
 }
