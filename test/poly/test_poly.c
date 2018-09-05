@@ -8,6 +8,7 @@ extern enum FtoError fto_test_poly_poly_addAll(struct FtoArray *tests)
     AOK(FTO_TEST_APPEND(tests, fto_test_poly_poly2d_init));
     AOK(FTO_TEST_APPEND(tests, fto_test_poly_poly2d_eval));
     AOK(FTO_TEST_APPEND(tests, fto_test_poly_poly2d_diff));
+    AOK(FTO_TEST_APPEND(tests, fto_test_poly_poly2d_substitute));
     return FTO_OK;
 }
 
@@ -65,8 +66,17 @@ extern void fto_test_poly_poly2d_diff(void **state)
 }
 
 
-extern void fto_test_poly_poly2d_mult(void **state)
+extern void fto_test_poly_poly2d_substitute(void **state)
 {
     (void)state;
-
+    struct FtoPoly2D *poly = fto_malloc(sizeof *poly);
+    AOK(fto_poly2d_init(poly, 2, 1.0, 2, 0, 1.0, 0, 2)); // x^2 + y^2
+    struct FtoPoly2D *xold = fto_malloc(sizeof *xold);
+    struct FtoPoly2D *yold = fto_malloc(sizeof *yold);
+    AOK(fto_poly2d_init(xold, 2, 1.0, 1, 0, 1.0, 0, 1)); // x = x' + y'
+    AOK(fto_poly2d_init(yold, 1, 2.0, 1, 0)); // y = 2*x'
+    struct FtoPoly2D *poly_new = fto_malloc(sizeof *poly_new);
+    AOK(fto_poly2d_substitute(poly, xold, yold, poly_new));
+    struct FtoPoly2D *expected = fto_malloc(sizeof *expected);
+    AOK(fto_poly2d_init(expected, 3, 2.0, 2, 0, 2.0, 1, 1, 1.0, 0, 2)); // 2x'^2 + 2x'*y' + y'^2
 }
