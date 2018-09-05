@@ -21,18 +21,18 @@ static double calc_2dtriangle_signedArea(
 
 
 extern struct Fto2DTriangle* fto_2dtriangle_new(
-        const struct Fto2DPoint pt1,
-        const struct Fto2DPoint pt2,
-        const struct Fto2DPoint pt3)
+        struct Fto2DPoint pt1,
+        struct Fto2DPoint pt2,
+        struct Fto2DPoint pt3)
 {
     struct Fto2DTriangle *triangle = fto_malloc(sizeof *triangle);
-//    if (calc_2dtriangle_signedArea(&pt1, &pt2, &pt3) < 0)
-//    {
-//        // make triangle points always counter-clockwise
-//        struct Fto2DPoint tmp = pt1;
-//        pt1 = pt2;
-//        pt2 = tmp;
-//    }
+    if (calc_2dtriangle_signedArea(&pt1, &pt2, &pt3) < 0)
+    {
+        // make triangle points always counter-clockwise
+        struct Fto2DPoint tmp = pt1;
+        pt1 = pt2;
+        pt2 = tmp;
+    }
     *triangle = (struct Fto2DTriangle){
         .point1 = pt1,
         .point2 = pt2,
@@ -42,15 +42,14 @@ extern struct Fto2DTriangle* fto_2dtriangle_new(
 }
 
 
+extern double fto_2dtriangle_signedArea(const struct Fto2DTriangle *triangle)
+{
+    return calc_2dtriangle_signedArea(&triangle->point1, &triangle->point2, &triangle->point3);
+}
+
 extern double fto_2dtriangle_area(const struct Fto2DTriangle *triangle)
 {
-    const double x1 = triangle->point1.x;
-    const double x2 = triangle->point2.x;
-    const double x3 = triangle->point3.x;
-    const double y1 = triangle->point1.y;
-    const double y2 = triangle->point2.y;
-    const double y3 = triangle->point3.y;
-    return .5 * fabs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+    return fabs(fto_2dtriangle_signedArea(triangle));
 }
 
 

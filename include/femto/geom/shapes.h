@@ -22,6 +22,7 @@ extern struct Fto2DTriangle* fto_2dtriangle_new(
 extern struct Fto2DRectangle* fto_2drectangle_new(const struct Fto2DPoint *corner1, const struct Fto2DPoint *corner2);
 
 extern double fto_2dtriangle_area(const struct Fto2DTriangle *triangle);
+extern double fto_2dtriangle_signedArea(const struct Fto2DTriangle *triangle);
 extern bool fto_2dtriangle_contains(const struct Fto2DTriangle *triangle, double x, double y);
 extern void fto_2dtriangle_xformCoordToRegularTriangle(
         const struct Fto2DTriangle *triangle,

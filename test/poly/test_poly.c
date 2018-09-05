@@ -1,6 +1,7 @@
 #include "femto/util.h"
 
 #include "test_poly.h"
+#include "fto_test.h"
 
 
 extern enum FtoError fto_test_poly_poly_addAll(struct FtoArray *tests)

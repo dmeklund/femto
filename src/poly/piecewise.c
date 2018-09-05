@@ -52,13 +52,13 @@ extern enum FtoError fto_poly_piecewise2d_chunkFromTriangle(
     struct FtoPoly2D *new_poly = fto_malloc(sizeof *new_poly);
     struct FtoPoly2D *xold = fto_malloc(sizeof *xold);
     struct FtoPoly2D *yold = fto_malloc(sizeof *yold);
-    const double area = 2*fto_2dtriangle_area(triangle);
+    const double area = fto_2dtriangle_area(triangle);
     // xi = (y3 - y1)/(2*A_k) x - (x3 - x1)/(2*A_k) y + ((x3 - x1)*y1 - ((y3 - y1)*x1)/(2*A_k)
     if ((ret = fto_poly2d_init(
             xold,
             3,
             .5 * (triangle->point3.y - triangle->point1.y) / area, 1, 0,
-            .5 * (triangle->point3.x - triangle->point1.x) / area, 0, 1,
+            .5 * (triangle->point1.x - triangle->point3.x) / area, 0, 1,
             .5 * ((triangle->point3.x - triangle->point1.x) * triangle->point1.y - (triangle->point3.y - triangle->point1.y) * triangle->point1.x) / area, 0, 0
             )) != FTO_OK)
         return ret;

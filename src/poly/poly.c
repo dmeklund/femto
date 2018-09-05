@@ -173,7 +173,7 @@ extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly)
     {
         for (int ind2 = ind1+1; ind2 < poly->num_elements; ++ind2)
         {
-            if (poly->orders[2*ind1] == poly->orders[2*ind2] && poly->orders[2*ind1+1] == poly->orders[2*ind1+2])
+            if (poly->orders[2*ind1] == poly->orders[2*ind2] && poly->orders[2*ind1+1] == poly->orders[2*ind2+1])
             {
                 poly->coeffs[ind1] += poly->coeffs[ind2];
                 poly->coeffs[ind2] = 0;

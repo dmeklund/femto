@@ -9,6 +9,6 @@ struct Fto2DPoint
 
 extern struct Fto2DPoint fto_2dpoint_new(double x, double y);
 
-extern enum FtoError fto_2dpoint_print(const struct Fto2DPoint point);
+extern enum FtoError fto_2dpoint_print(struct Fto2DPoint point);
 
 #endif // FTO_GEOM_POINT_H
