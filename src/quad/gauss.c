@@ -117,7 +117,7 @@ extern enum FtoError fto_gauss_integrate2d_triangle(
         double x, y;
         transform2dNodeToXY(node, triangle, &x, &y);
         if ((ret = fto_function_eval2d(func, x, y, &val)) != FTO_OK) return ret;
-        result += triangle_area * val;
+        result += weights[node_ind] * triangle_area * val;
     }
     *result_out = result;
     return FTO_OK;

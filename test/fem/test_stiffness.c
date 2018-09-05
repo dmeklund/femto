@@ -29,7 +29,19 @@ extern void fto_test_fem_stiffness_calculateStiffnessMatrix2D(void **state)
     AOK(fto_basis_piecewisePoly_construct(mesh, NULL, 1, basis_set));
     struct FtoMatrix *stiffness = fto_malloc(sizeof *stiffness);
     AOK(fto_stiffness_calculateStiffnessMatrix2D(mesh, basis_set, stiffness));
-    AOK(fto_mat_print(stiffness));
+    double val;
+    AOK(fto_mat_getval(stiffness, 0, 0, &val));
+    FTO_ASSERT(fto_isClose_default(val, 1.0));
+    AOK(fto_mat_getval(stiffness, 0, 1, &val));
+    FTO_ASSERT(fto_isClose_default(val, -.5));
+    AOK(fto_mat_getval(stiffness, 0, 2, &val));
+    FTO_ASSERT(fto_isClose_default(val, -.5));
+    AOK(fto_mat_getval(stiffness, 1, 1, &val));
+    FTO_ASSERT(fto_isClose_default(val, .5));
+    AOK(fto_mat_getval(stiffness, 1, 2, &val));
+    FTO_ASSERT(fto_isClose_default(val, 0.0));
+    AOK(fto_mat_getval(stiffness, 2, 2, &val));
+    FTO_ASSERT(fto_isClose_default(val, 0.5));
 }
 
 
@@ -46,5 +58,17 @@ extern void fto_test_fem_stiffness_elementMatrix2D(void **state)
     struct FtoMatrix *element_stiffness = fto_malloc(sizeof *element_stiffness);
     AOK(fto_stiffness_elementMatrix2D(mesh, basis_set, 0, element_stiffness));
     AOK(fto_basis_set_print(basis_set));
-    AOK(fto_mat_print(element_stiffness));
+    double val;
+    AOK(fto_mat_getval(element_stiffness, 0, 0, &val));
+    FTO_ASSERT(fto_isClose_default(val, 1.0));
+    AOK(fto_mat_getval(element_stiffness, 0, 1, &val));
+    FTO_ASSERT(fto_isClose_default(val, -.5));
+    AOK(fto_mat_getval(element_stiffness, 0, 2, &val));
+    FTO_ASSERT(fto_isClose_default(val, -.5));
+    AOK(fto_mat_getval(element_stiffness, 1, 1, &val));
+    FTO_ASSERT(fto_isClose_default(val, .5));
+    AOK(fto_mat_getval(element_stiffness, 1, 2, &val));
+    FTO_ASSERT(fto_isClose_default(val, 0.0));
+    AOK(fto_mat_getval(element_stiffness, 2, 2, &val));
+    FTO_ASSERT(fto_isClose_default(val, 0.5));
 }
