@@ -31,6 +31,7 @@ extern enum FtoError fto_valueArray_get(struct FtoValueArray *array, int index, 
 extern bool fto_intArray_contains(const int *int_array, int val, int length);
 extern int fto_intArray_offset(const int *int_array, int val, int length);
 extern int* fto_intArray_new(int length, ...);
+extern bool fto_intArray_allEqual(int length, const int *arr1, const int *arr2);
 
 extern double* fto_doubleArray_new(int length, ...);
 

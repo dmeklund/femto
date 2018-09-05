@@ -64,6 +64,7 @@ extern enum FtoError fto_poly2d_substitute(
         struct FtoPoly2D *poly_out
 );
 extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly);
+extern bool fto_poly2d_isEqual(struct FtoPoly2D *poly1, struct FtoPoly2D *poly2);
 
 extern enum FtoError fto_poly2d_print(const struct FtoPoly2D *poly);
 

@@ -134,3 +134,12 @@ extern double* fto_doubleArray_new(int length, ...)
 }
 
 
+extern bool fto_intArray_allEqual(int length, const int *arr1, const int *arr2)
+{
+    for (int ind = 0; ind < length; ++ind)
+    {
+        if (arr1[ind] != arr2[ind])
+            return false;
+    }
+    return true;
+}

@@ -274,3 +274,27 @@ extern bool fto_poly2d_iszero(const struct FtoPoly2D *poly)
     }
     return true;
 }
+
+
+extern bool fto_poly2d_isEqual(struct FtoPoly2D *poly1, struct FtoPoly2D *poly2)
+{
+    fto_poly2d_simplify(poly1);
+    fto_poly2d_simplify(poly2);
+    if (poly1->num_elements != poly2->num_elements) return false;
+    for (int element_ind1 = 0; element_ind1 < poly1->num_elements; ++element_ind1)
+    {
+        bool element_match = false;
+        for (int element_ind2 = 0; element_ind2 < poly2->num_elements; ++element_ind2)
+        {
+            if (fto_intArray_allEqual(2, &poly1->orders[2*element_ind1], &poly2->orders[2*element_ind2]) &&
+                    fto_isClose_default(poly1->coeffs[element_ind1], poly2->coeffs[element_ind2]))
+            {
+                element_match = true;
+                break;
+            }
+        }
+        if (!element_match)
+            return false;
+    }
+    return true;
+}
