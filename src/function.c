@@ -82,6 +82,15 @@ extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, doub
 }
 
 
+extern double fto_function_eval2d_smpl(const struct FtoGenericFunc *func, double x_pt, double y_pt)
+{
+    double result;
+    fto_function_eval2d(func, x_pt, y_pt, &result);
+    return result;
+}
+
+
+
 extern enum FtoError fto_function_dot(
         struct FtoVectorFunc *func1,
         struct FtoVectorFunc *func2,

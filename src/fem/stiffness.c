@@ -6,6 +6,9 @@
 #include "femto/quad/gauss.h"
 #include "femto/mesh/mesh.h"
 
+#include <stdio.h>
+
+
 static enum FtoError calculateStiffnessElement(
         const struct Fto2DMesh *mesh,
         const struct FtoBasisSet *basis_set,
@@ -27,12 +30,12 @@ static enum FtoError calculateStiffnessElement(
     if ((ret = fto_calc_grad(&basis2, &grad2)) != FTO_OK) return ret;
     struct FtoGenericFunc dot_prod;
     if ((ret = fto_function_dot(&grad1, &grad2, &dot_prod)) != FTO_OK) return ret;
-    struct FtoGenericFunc *integrand;
-    if ((ret = fto_function_add(&dot_prod, func_mult, &integrand)) != FTO_OK) return ret;
+    struct FtoGenericFunc integrand = dot_prod;
+//    if ((ret = fto_function_add(&dot_prod, func_mult, &integrand)) != FTO_OK) return ret;
     double result;
     struct Fto2DTriangle triangle;
     if ((ret = fto_2dmesh_toTriangle(mesh, triangle_ind, &triangle)) != FTO_OK) return ret;
-    if ((ret = fto_gauss_integrate2d_triangle(integrand, &triangle, 3, &result)) != FTO_OK) return ret;
+    if ((ret = fto_gauss_integrate2d_triangle(&integrand, &triangle, 3, &result)) != FTO_OK) return ret;
     *val_out = result;
     return FTO_OK;
 }

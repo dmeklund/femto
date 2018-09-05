@@ -109,7 +109,7 @@ extern enum FtoError fto_poly2d_diff(const struct FtoPoly2D *poly, int axis, str
 extern enum FtoError fto_poly2d_mult(
         const struct FtoPoly2D *poly1, const struct FtoPoly2D *poly2, struct FtoPoly2D *poly_out)
 {
-    // currently makes no attempt at combining like terms
+    // does not simplify
     int num_elements = poly1->num_elements * poly2->num_elements;
     int element_offset = 0;
     double *coeffs = fto_malloc_atomic(num_elements * sizeof *coeffs);
@@ -120,7 +120,7 @@ extern enum FtoError fto_poly2d_mult(
         {
             coeffs[element_offset] = poly1->coeffs[element_ind1] * poly2->coeffs[element_ind2];
             orders[2*element_offset] = poly1->orders[2*element_ind1] + poly2->orders[2*element_ind2];
-            orders[2*element_offset+1] = poly1->orders[2*element_ind1+1] + poly2->orders[2*element_ind1+1];
+            orders[2*element_offset+1] = poly1->orders[2*element_ind1+1] + poly2->orders[2*element_ind2+1];
             ++element_offset;
         }
     }
@@ -162,6 +162,7 @@ extern enum FtoError fto_poly2d_print(const struct FtoPoly2D *poly)
         if (element_ind < poly->num_elements-1)
             printf(" + ");
     }
+    printf("\n");
     return FTO_OK;
 }
 
@@ -180,14 +181,23 @@ extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly)
         }
     }
     int copyFrom_ind = 0;
-    for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
+    int new_num_elements = poly->num_elements;
+    for (int element_ind = 0; element_ind < poly->num_elements && copyFrom_ind < poly->num_elements; ++element_ind)
     {
-        while (poly->coeffs[copyFrom_ind] == 0)
+        while (poly->coeffs[copyFrom_ind] == 0 && copyFrom_ind < poly->num_elements)
         {
             ++copyFrom_ind;
-            poly->num_elements -= 1;
+            --new_num_elements;
         }
+        if (copyFrom_ind != element_ind && copyFrom_ind < poly->num_elements)
+        {
+            poly->coeffs[element_ind] = poly->coeffs[copyFrom_ind];
+            poly->orders[2*element_ind] = poly->orders[2*copyFrom_ind];
+            poly->orders[2*element_ind+1] = poly->orders[2*copyFrom_ind+1];
+        }
+        ++copyFrom_ind;
     }
+    poly->num_elements = new_num_elements;
     return FTO_OK;
 }
 
@@ -210,16 +220,15 @@ extern enum FtoError fto_poly2d_substitute(
     poly_out->num_elements = 0;
     for (int element_ind = 0; element_ind < poly->num_elements; ++element_ind)
     {
-        struct FtoPoly2D *element_poly_x = fto_malloc(sizeof *element_poly_x);
+        struct FtoPoly2D *element_poly = fto_malloc(sizeof *element_poly);
         int order_x = poly->orders[2*element_ind];
         int order_y = poly->orders[2*element_ind+1];
-        if ((ret = fto_poly2d_ipow(xold, order_x, element_poly_x)) != FTO_OK) return ret;
-        if ((ret = fto_poly2d_scale(element_poly_x, poly->coeffs[element_ind])) != FTO_OK) return ret;
-        if ((ret = fto_poly2d_add(poly_out, element_poly_x, element_poly_x)) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_ipow(xold, order_x, element_poly)) != FTO_OK) return ret;
         struct FtoPoly2D *element_poly_y = fto_malloc(sizeof *element_poly_y);
         if ((ret = fto_poly2d_ipow(yold, order_y, element_poly_y)) != FTO_OK) return ret;
-        if ((ret = fto_poly2d_scale(element_poly_y, poly->coeffs[element_ind])) != FTO_OK) return ret;
-        if ((ret = fto_poly2d_add(poly_out, element_poly_y, element_poly_y)) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_mult(element_poly, element_poly_y, element_poly)) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_scale(element_poly, poly->coeffs[element_ind])) != FTO_OK) return ret;
+        if ((ret = fto_poly2d_add(poly_out, element_poly, poly_out)) != FTO_OK) return ret;
     }
     return FTO_OK;
 }

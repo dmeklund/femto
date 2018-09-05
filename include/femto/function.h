@@ -49,6 +49,7 @@ struct FtoVectorFunc
 
 extern enum FtoError fto_function_eval1d(const struct FtoGenericFunc *func, double x_pt, double *result_out);
 extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, double x_pt, double y_pt, double *result_out);
+extern double fto_function_eval2d_smpl(const struct FtoGenericFunc *func, double x_pt, double y_pt);
 extern enum FtoError fto_function_fromPoly1D(const struct FtoPoly1D *poly, struct FtoGenericFunc *func_out);
 extern enum FtoError fto_function_fromPoly2D(const struct FtoPoly2D *poly, struct FtoGenericFunc *func_out);
 extern enum FtoError fto_function_fromPolyPiecewise2D(struct FtoPolyPiecewise2D *poly, struct FtoGenericFunc *func_out);

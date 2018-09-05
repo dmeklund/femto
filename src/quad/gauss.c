@@ -112,12 +112,12 @@ extern enum FtoError fto_gauss_integrate2d_triangle(
     const double triangle_area = fto_2dtriangle_area(triangle);
     for (int node_ind = 0; node_ind < num_nodes; ++node_ind)
     {
-        double evaled[2];
+        double result;
         const double *node = &nodes[2*node_ind];
-        double x, y;
-        transform2dNodeToXY(node, triangle, &x, &y);
-        if ((ret = fto_function_eval2d(func, x, y, evaled)) != FTO_OK) return ret;
-        result += triangle_area;
+//        double x, y;
+//        transform2dNodeToXY(node, triangle, &x, &y);
+        if ((ret = fto_function_eval2d(func, node[0], node[1], &result)) != FTO_OK) return ret;
+        result += 2./3 * triangle_area * result;
     }
     *result_out = result;
     return FTO_OK;

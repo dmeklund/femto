@@ -37,7 +37,7 @@ extern void fto_test_fem_stiffness_elementMatrix2D(void **state)
 {
     (void)state;
     struct Fto2DMesh *mesh = fto_malloc(sizeof *mesh);
-    const double height = 3;
+    const double height = 8;
     struct Fto2DTriangle *triangle = fto_2dtriangle_new(
             fto_2dpoint_new(0, 0), fto_2dpoint_new(height, 0), fto_2dpoint_new(0, height));
     AOK(fto_2dmesh_fromTriangle(triangle, mesh));
