@@ -29,7 +29,7 @@ enum FtoError
     FTO_ILLEGAL_OP
 };
 
-#define FTO_RAISE_SIGTRAP 1
+#define FTO_RAISE_SIGTRAP 0
 
 // memory allocation
 extern void* fto_malloc(size_t sz);

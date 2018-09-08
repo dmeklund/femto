@@ -7,6 +7,8 @@
 #include "quad/test_gauss.h"
 #include "fto_test.h"
 
+#include <math.h>
+
 
 extern void fto_test_quad_gauss_integrate1d(void **state)
 {
@@ -41,10 +43,29 @@ extern void fto_test_quad_gauss_integrate2d_triangle(void **state)
 }
 
 
+extern void fto_test_quad_gauss_integrate2d_line(void **state)
+{
+    (void)state;
+    struct FtoPoly2D *poly = fto_malloc(sizeof *poly);
+    fto_poly2d_init(poly, 2, 1.0, 2, 0, 1.0, 0, 2); // x^2 + y^2
+    struct FtoGenericFunc *func = fto_malloc(sizeof *func);
+    fto_function_fromPoly2D(poly, func);
+    int num_nodes = 3;
+    double result;
+    struct Fto2DLine line = fto_2dline_fromDoubles(1, 0, 1, 2); // x=1 => f(x,y) = 1.0 + y^2
+    fto_gauss_integrate2d_line(func, &line, num_nodes, &result);
+    AOK(fto_assertClose(result, 2 + 8.0/3, FTO_DEFAULT_RTOL, FTO_DEFAULT_ATOL));
+    line = fto_2dline_fromDoubles(0, 0, 1, 1);  // y=x => f(x,y) = 2*x^2
+    fto_gauss_integrate2d_line(func, &line, num_nodes, &result);
+    AOK(fto_assertClose(result, sqrt(2) * 2.0/3, FTO_DEFAULT_RTOL, FTO_DEFAULT_ATOL));
+}
+
+
 extern enum FtoError fto_test_quad_gauss_addAll(struct FtoArray *tests)
 {
     enum FtoError ret;
     if ((ret = FTO_TEST_APPEND(tests, fto_test_quad_gauss_integrate1d)) != FTO_OK) return ret;
     if ((ret = FTO_TEST_APPEND(tests, fto_test_quad_gauss_integrate2d_triangle)) != FTO_OK) return ret;
+    if ((ret = FTO_TEST_APPEND(tests, fto_test_quad_gauss_integrate2d_line)) != FTO_OK) return ret;
     return FTO_OK;
 }

@@ -17,7 +17,7 @@ struct Fto2DRectangle
 
 struct Fto2DLine
 {
-    const struct Fto2DPoint point1, point2;
+    struct Fto2DPoint point1, point2;
 };
 
 extern struct Fto2DTriangle* fto_2dtriangle_new(
