@@ -162,6 +162,10 @@ extern enum FtoError fto_function_mult(
                 .state = combined
             };
         }
+        else
+        {
+            return fto_err_set(FTO_INVALID_ARG, "Not supported");
+        }
     }
     *func_out = result;
     return FTO_OK;

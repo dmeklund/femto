@@ -109,3 +109,31 @@ extern enum FtoError fto_2dtriangle_print(const struct Fto2DTriangle *triangle)
     if ((ret = fto_2dpoint_print(triangle->point3)) != FTO_OK) return ret;
     return FTO_OK;
 }
+
+
+extern struct Fto2DLine fto_2dline_fromDoubles(double x1, double y1, double x2, double y2)
+{
+    return (struct Fto2DLine){
+        .point1 = {.x = x1, .y = y1},
+        .point2 = {.x = x2, .y = y2}
+    };
+}
+
+
+extern struct Fto2DPoint fto_2dline_pointFromNode(const struct Fto2DLine *line, double node)
+{
+    const double ratio_x = (line->point2.x - line->point1.x)/2;
+    const double ratio_y = (line->point2.y - line->point1.y)/2;
+    struct Fto2DPoint result = {
+            .x = line->point1.x + (1 + node) * ratio_x,
+            .y = line->point1.y + (1 + node) * ratio_y
+    };
+    return result;
+}
+
+extern double fto_2dline_length(const struct Fto2DLine *line)
+{
+    const double delta_x = line->point2.x - line->point1.x;
+    const double delta_y = line->point2.y - line->point1.y;
+    return sqrt(delta_x*delta_x + delta_y*delta_y);
+}

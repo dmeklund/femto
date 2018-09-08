@@ -79,7 +79,12 @@ static enum FtoError getNodesAndWeights2d(int num_nodes, const double **nodes_ou
 }
 
 
-extern enum FtoError fto_gauss_integrate1d(struct FtoGenericFunc *func, double a, double b, int num_nodes, double *result_out)
+extern enum FtoError fto_gauss_integrate1d(
+        const struct FtoGenericFunc *func,
+        double a,
+        double b,
+        int num_nodes,
+        double *result_out)
 {
     enum FtoError ret;
     const double *nodes;
@@ -99,8 +104,8 @@ extern enum FtoError fto_gauss_integrate1d(struct FtoGenericFunc *func, double a
 
 
 extern enum FtoError fto_gauss_integrate2d_triangle(
-        struct FtoGenericFunc *func,
-        struct Fto2DTriangle *triangle,
+        const struct FtoGenericFunc *func,
+        const struct Fto2DTriangle *triangle,
         int num_nodes,
         double *result_out)
 {
@@ -119,6 +124,30 @@ extern enum FtoError fto_gauss_integrate2d_triangle(
         if ((ret = fto_function_eval2d(func, x, y, &val)) != FTO_OK) return ret;
         result += weights[node_ind] * triangle_area * val;
     }
+    *result_out = result;
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_gauss_integrate2d_line(
+        const struct FtoGenericFunc *func,
+        const struct Fto2DLine *line,
+        int num_nodes,
+        double *result_out)
+{
+    enum FtoError ret;
+    const double *nodes;
+    const double *weights;
+    if ((ret = getNodesAndWeights(num_nodes, &nodes, &weights)) != FTO_OK) return ret;
+    double result = 0;
+    for (int node_ind = 0; node_ind < num_nodes; ++node_ind)
+    {
+        double evaled;
+        const struct Fto2DPoint pt = fto_2dline_pointFromNode(line, nodes[node_ind]);
+        if ((ret = fto_function_eval2d(func, pt.x, pt.y, &evaled)) != FTO_OK) return ret;
+        result += weights[node_ind] * evaled;
+    }
+    result *= fto_2dline_length(line) / 2;
     *result_out = result;
     return FTO_OK;
 }

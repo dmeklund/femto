@@ -15,6 +15,8 @@ struct Fto2DMesh
     int num_nodes; /* not equal to num_nodesPerTriangle*num_triangles, since nodes are shared between triangles */
     int num_nodesPerTriangle; /* must be >= 3 */
     int num_triangles;
+    int *edgePath; /* array of node offsets (into the *nodes array) that define the (1D) boundary */
+    int num_edgeNodes; /* length of *edgePath */
 };
 
 // supplemental data structure to allow lookup of affected triangles by node index
