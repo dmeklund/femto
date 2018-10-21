@@ -32,6 +32,7 @@ enum FtoError fto_array_append(struct FtoArray *array, void *value)
     {
         const int new_capacity = (int)(array->capacity * scaleFactor) + 1;
         array->values = fto_realloc(array->values, (size_t)new_capacity * sizeof *array->values);
+        array->capacity = new_capacity;
     }
     array->values[array->length] = value;
     array->length += 1;

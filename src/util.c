@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <gc.h>
 
@@ -16,7 +17,9 @@ void* fto_malloc(size_t sz)
 #if USE_GC
     return GC_MALLOC(sz);
 #else
-    return malloc(sz);
+    void *result = malloc(sz);
+    memset(result, 0, sz);
+    return result;
 #endif
 }
 
