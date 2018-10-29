@@ -133,7 +133,7 @@ extern enum FtoError fto_function_mult(
         struct FtoGenericFunc **func_out)
 {
     enum FtoError ret;
-    struct FtoGenericFunc *result = fto_malloc(sizeof *func_out);
+    struct FtoGenericFunc *result = fto_malloc(sizeof *result);
     if (func1->type == FTO_POLYNOMIAL_2D && func2->type == FTO_POLYNOMIAL_2D)
     {
         struct FtoPoly2D *poly_result = fto_malloc(sizeof *poly_result);

@@ -184,7 +184,7 @@ extern enum FtoError fto_poly2d_simplify(struct FtoPoly2D *poly)
     int new_num_elements = poly->num_elements;
     for (int element_ind = 0; element_ind < poly->num_elements && copyFrom_ind < poly->num_elements; ++element_ind)
     {
-        while (poly->coeffs[copyFrom_ind] == 0 && copyFrom_ind < poly->num_elements)
+        while (copyFrom_ind < poly->num_elements && poly->coeffs[copyFrom_ind] == 0)
         {
             ++copyFrom_ind;
             --new_num_elements;
