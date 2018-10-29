@@ -57,7 +57,7 @@ extern void fto_test_fem_stiffness_elementMatrix2D(void **state)
     AOK(fto_basis_piecewisePoly_construct(mesh, NULL, 1, basis_set));
     struct FtoMatrix *element_stiffness = fto_malloc(sizeof *element_stiffness);
     AOK(fto_stiffness_elementMatrix2D(mesh, basis_set, 0, element_stiffness));
-    AOK(fto_basis_set_print(basis_set));
+//    AOK(fto_basis_set_print(basis_set));
     double val;
     AOK(fto_mat_getval(element_stiffness, 0, 0, &val));
     FTO_ASSERT(fto_isClose_default(val, 1.0));
