@@ -16,5 +16,11 @@ extern enum FtoError fto_stiffness_calculateStiffnessMatrix2D(
         const struct Fto2DMesh *mesh,
         const struct FtoBasisSet *basis_set,
         struct FtoMatrix *matrix_out);
+extern enum FtoError fto_stiffness_bVector(
+        const struct Fto2DMesh *mesh,
+        const struct FtoBasisSet *basis_set,
+        const struct FtoGenericFunc *f_func,
+        const struct FtoGenericFunc *g_func,
+        struct FtoMatrix *bColVector_out);
 
 #endif // FTO_FEM_STIFFNESS_H

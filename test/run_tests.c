@@ -14,6 +14,7 @@ static void addAll(struct FtoArray *test_array)
 {
     AOK(fto_test_quad_gauss_addAll(test_array));
     AOK(fto_test_basis_piecewisePoly_addAll(test_array));
+    AOK(fto_test_fem_solver_addAll(test_array));
     AOK(fto_test_fem_stiffness_addAll(test_array));
     AOK(fto_test_poly_poly_addAll(test_array));
 }

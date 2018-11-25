@@ -7,7 +7,7 @@
 #include "femto/poly/piecewise.h"
 
 typedef double (*Fto1DFunctionPtr)(double x);
-typedef double (*Fto2DFunctionPtr)(double x, double y);
+typedef double (*Fto2DFunctionPtr)(double x, double y, void *user_data);
 
 enum FtoFunctionType
 {
@@ -34,6 +34,7 @@ struct Fto1DFunction
 struct Fto2DFunction
 {
     Fto2DFunctionPtr function;
+    void *user_data;
 };
 
 struct FtoCombinedFuncData
@@ -50,9 +51,12 @@ struct FtoVectorFunc
 extern enum FtoError fto_function_eval1d(const struct FtoGenericFunc *func, double x_pt, double *result_out);
 extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, double x_pt, double y_pt, double *result_out);
 extern double fto_function_eval2d_smpl(const struct FtoGenericFunc *func, double x_pt, double y_pt);
+
 extern enum FtoError fto_function_fromPoly1D(const struct FtoPoly1D *poly, struct FtoGenericFunc *func_out);
 extern enum FtoError fto_function_fromPoly2D(const struct FtoPoly2D *poly, struct FtoGenericFunc *func_out);
 extern enum FtoError fto_function_fromPolyPiecewise2D(struct FtoPolyPiecewise2D *poly, struct FtoGenericFunc *func_out);
+extern enum FtoError fto_function_from2DPointer(Fto2DFunctionPtr func_ptr, void *user_data, struct FtoGenericFunc *func_out);
+
 extern enum FtoError fto_function_dot(
         struct FtoVectorFunc *func1,
         struct FtoVectorFunc *func2,

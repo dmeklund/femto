@@ -47,7 +47,7 @@ extern enum FtoError fto_function_eval2d(const struct FtoGenericFunc *func, doub
     if (func->type == FTO_FUNC_PTR_2D)
     {
         const struct Fto2DFunction *func_struct = func->state;
-        result = func_struct->function(x_pt, y_pt);
+        result = func_struct->function(x_pt, y_pt, func_struct->user_data);
     }
     else if (func->type == FTO_POLYNOMIAL_2D)
     {
@@ -255,5 +255,23 @@ extern enum FtoError fto_function_print(const struct FtoGenericFunc *func)
         default:
             return fto_err_set(FTO_INVALID_ARG, "Can't print function of type %d", func->type);
     }
+    return FTO_OK;
+}
+
+
+extern enum FtoError fto_function_from2DPointer(
+        Fto2DFunctionPtr func_ptr,
+        void *user_data,
+        struct FtoGenericFunc *func_out)
+{
+    struct Fto2DFunction *func_state = fto_malloc(sizeof *func_state);
+    *func_state = (struct Fto2DFunction){
+        .function = func_ptr,
+        .user_data = user_data
+    };
+    *func_out = (struct FtoGenericFunc){
+        .type = FTO_FUNC_PTR_2D,
+        .state = func_state
+    };
     return FTO_OK;
 }

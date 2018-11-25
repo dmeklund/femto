@@ -12,7 +12,8 @@ extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect, struc
         .num_triangles = num_triangles,
         .num_nodesPerTriangle = 3,
         .nodes = fto_malloc(num_nodes * sizeof *mesh_out->nodes),
-        .triangles = fto_malloc(num_triangles * sizeof *mesh_out->triangles)
+        .triangles = fto_malloc(num_triangles * sizeof *mesh_out->triangles),
+        .edgePath = fto_malloc(4 * sizeof *mesh_out->edgePath)
     };
     FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 0, 0) = rect->corner1->x;
     FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 0, 1) = rect->corner1->y;
@@ -20,14 +21,16 @@ extern enum FtoError fto_2dmesh_fromRectangle(struct Fto2DRectangle *rect, struc
     FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 1, 1) = rect->corner2->y;
     FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 2, 0) = rect->corner2->x;
     FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 2, 1) = rect->corner1->y;
-    FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 3, 0) = rect->corner2->x;
-    FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 3, 1) = rect->corner1->y;
+    FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 3, 0) = rect->corner1->x;
+    FTO_C_ORDER_2D_IDX(mesh_out->nodes, mesh_out->num_nodes, 2, 3, 1) = rect->corner2->y;
     FTO_C_ORDER_2D_IDX(mesh_out->triangles, mesh_out->num_triangles, 3, 0, 0) = 0;
     FTO_C_ORDER_2D_IDX(mesh_out->triangles, mesh_out->num_triangles, 3, 0, 1) = 1;
     FTO_C_ORDER_2D_IDX(mesh_out->triangles, mesh_out->num_triangles, 3, 0, 2) = 2;
     FTO_C_ORDER_2D_IDX(mesh_out->triangles, mesh_out->num_triangles, 3, 1, 0) = 0;
     FTO_C_ORDER_2D_IDX(mesh_out->triangles, mesh_out->num_triangles, 3, 1, 1) = 1;
     FTO_C_ORDER_2D_IDX(mesh_out->triangles, mesh_out->num_triangles, 3, 1, 2) = 3;
+    mesh_out->edgePath = fto_intArray_new(4, 0, 3, 1, 2);
+    mesh_out->num_edgeNodes = 4;
     return FTO_OK;
 }
 

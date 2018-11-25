@@ -16,6 +16,7 @@ set(
         src/basis/set.c
         src/calc/diff.c
         src/eqn/poisson.c
+        src/fem/solver.c
         src/fem/stiffness.c
         src/geom/point.c
         src/geom/shapes.c
@@ -32,6 +33,7 @@ set(
         include/femto/basis/piecewise_poly.h
         include/femto/basis/set.h
         include/femto/calc/diff.h
+        include/femto/fem/solver.h
         include/femto/fem/stiffness.h
         include/femto/geom/point.h
         include/femto/geom/shapes.h
@@ -68,6 +70,7 @@ set(
         test/fto_test.h
         test/basis/test_piecewise_poly.c
         test/basis/test_piecewise_poly.h
+        test/fem/test_solver.c
         test/fem/test_stiffness.c
         test/fem/test_stiffness.h
         test/poly/test_poly.c
