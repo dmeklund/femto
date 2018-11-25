@@ -2,6 +2,7 @@
 #include "femto/linalg/matrix.h"
 
 #include <stdio.h>
+#include <string.h>
 
 
 enum FtoError fto_mat_new(const int num_rows, const int num_cols, struct FtoMatrix **result_out)
@@ -60,6 +61,7 @@ enum FtoError fto_mat_init(int num_rows, int num_cols, struct FtoMatrix *result_
         .num_cols = num_cols,
         .values = fto_malloc_atomic(num_rows * num_cols * sizeof *result_out->values)
     };
+    memset(result_out->values, 0, num_rows*num_cols * sizeof *result_out->values);
     return FTO_OK;
 }
 

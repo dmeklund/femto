@@ -78,10 +78,10 @@ extern enum FtoError fto_poly_piecewise2d_chunkFromTriangle(
             new_poly)) != FTO_OK)
         return ret;
     fto_poly2d_simplify(new_poly);
-    printf("Old poly: ");
-    fto_poly2d_print(poly);
-    printf("New poly: ");
-    fto_poly2d_print(new_poly);
+//    printf("Old poly: ");
+//    fto_poly2d_print(poly);
+//    printf("New poly: ");
+//    fto_poly2d_print(new_poly);
     *chunk_out = (struct FtoPolyPiecewise2DTriangle){
         .triangle = triangle,
         .poly = new_poly
