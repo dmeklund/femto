@@ -25,20 +25,21 @@ struct GFuncUserData
 static double gFuncImpl(double x, double y, void *user_data)
 {
     struct GFuncUserData *gFunc_userData = user_data;
-    const double a = gFunc_userData->a;
-    const double b = gFunc_userData->b;
+//    const double a = gFunc_userData->a;
+//    const double b = gFunc_userData->b;
     double result;
-    if (fto_isClose_default(x, 0) || fto_isClose_default(y, 0))
-        result = 0;
-    else if (fto_isClose_default(x, a))
-        result = 2*a*a;
-    else if (fto_isClose_default(x, b))
-        result = 2*b*b;
-    else
-    {
-        fto_assert_fail("Invalid point provided: (%g, %g)", x, y);
-        assert(false);
-    }
+//    if (fto_isClose_default(x, 0) || fto_isClose_default(y, 0))
+//        result = 0;
+//    else if (fto_isClose_default(x, a))
+//        result = 2*a*a;
+//    else if (fto_isClose_default(x, b))
+//        result = 2*b*b;
+//    else
+//    {
+//        fto_assert_fail("Invalid point provided: (%g, %g)", x, y);
+//        assert(false);
+//    }
+    result = 2*x*x;
     printf("gFunc at (%g, %g): %g\n", x, y, result);
     return result;
 }

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(femto LANGUAGES C)
+enable_testing()
 
 if (${CMAKE_C_COMPILER_ID} MATCHES GNU)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -g -O0 -Wall")
@@ -83,3 +84,4 @@ add_executable(fto_run_tests ${TEST_FILES})
 target_link_libraries(fto_run_tests ${LIBRARIES} femto)
 target_include_directories(fto_run_tests PRIVATE test)
 
+add_test(TestSuite fto_run_tests)
