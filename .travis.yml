@@ -5,6 +5,9 @@ dist: xenial
 compiler:
     - gcc
 
+before_install:
+    - sudo apt-get install libgc-dev
+
 before_script:
     - mkdir build
     - cd build
