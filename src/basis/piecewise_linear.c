@@ -1,8 +1,8 @@
 #include "femto/util.h"
+#include "femto/util/array.h"
 #include "femto/basis/piecewise_linear.h"
 
 #include <math.h>
-#include "femto/util/array.h"
 
 extern double fto_basis_pwl2d_eval(const struct FtoPwl2DFunction *func, const struct Fto2DPoint *point)
 {
