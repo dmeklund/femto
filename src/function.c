@@ -275,3 +275,9 @@ extern enum FtoError fto_function_from2DPointer(
     };
     return FTO_OK;
 }
+
+
+extern bool fto_function_isEqual(const struct FtoGenericFunc *func1, const struct FtoGenericFunc *func2)
+{
+    return func1->state == func2->state && func1->type == func2->type;
+}

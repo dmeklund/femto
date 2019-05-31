@@ -72,5 +72,6 @@ extern enum FtoError fto_function_add(
 extern int fto_function_ndims(const struct FtoGenericFunc *func);
 
 extern enum FtoError fto_function_print(const struct FtoGenericFunc *func);
+extern bool fto_function_isEqual(const struct FtoGenericFunc *func1, const struct FtoGenericFunc *func2);
 
 #endif /* FTO_FUNCTION_H */

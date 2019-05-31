@@ -69,6 +69,8 @@ set(
         test/fto_test.h
         test/basis/test_piecewise_poly.c
         test/basis/test_piecewise_poly.h
+        test/basis/test_set.c
+        test/basis/test_set.h
         test/fem/test_solver.c
         test/fem/test_stiffness.c
         test/fem/test_stiffness.h

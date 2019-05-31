@@ -40,7 +40,7 @@ static double gFuncImpl(double x, double y, void *user_data)
 //        assert(false);
 //    }
     result = 2*x*x;
-    printf("gFunc at (%g, %g): %g\n", x, y, result);
+//    printf("gFunc at (%g, %g): %g\n", x, y, result);
     return result;
 }
 
