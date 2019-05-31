@@ -12,7 +12,6 @@ message(${CMAKE_C_COMPILER_ID})
 
 set(
         SOURCE_FILES
-        src/basis/piecewise_linear.c
         src/basis/piecewise_poly.c
         src/basis/set.c
         src/calc/diff.c
@@ -30,7 +29,6 @@ set(
         src/function.c
         src/util.c
         src/util/array.c
-        include/femto/basis/piecewise_linear.h
         include/femto/basis/piecewise_poly.h
         include/femto/basis/set.h
         include/femto/calc/diff.h
@@ -69,8 +67,6 @@ set(
         test/run_tests.c
         test/fto_test.c
         test/fto_test.h
-        test/basis/test_piecewise_linear.c
-        test/basis/test_piecewise_linear.h
         test/basis/test_piecewise_poly.c
         test/basis/test_piecewise_poly.h
         test/fem/test_solver.c
