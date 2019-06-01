@@ -1,6 +1,11 @@
 #ifndef FTO_BASIS_POLY_H
 #define FTO_BASIS_POLY_H
 
+/**
+ * @file
+ * @brief Polynomial support
+ */
+
 #include "femto/util.h"
 
 struct FtoPoly1D
@@ -24,8 +29,17 @@ extern enum FtoError fto_poly1d_init(struct FtoPoly1D *poly, int order, ...);
 extern double fto_poly1d_eval(const struct FtoPoly1D *poly, double pt_x);
 extern enum FtoError fto_poly1d_diff(const struct FtoPoly1D *poly, struct FtoPoly1D *diff_poly_out);
 
-// e.g., for x^2*y + 3.5*x*y^2 + 1.5*y^3:
-// fto_poly2d_init(poly, 3, /* x^2*y */ 1.0, 2, 1, /* 3.5*x*y^2 */ 3.5, 1, 2, /* 1.5*y^3 */ 1.5, 0, 3)
+/// @brief Initialize a two dimensional polynomial.
+/// There must be 3*num_elements varargs arguments passed into this function. For each element,
+/// provide a coefficient (double) and powers for the x and y variables (ints). For example, to
+/// create the polynomial x^2*y + 3.5*x*y^2 + 1.5*y^3
+/// @code
+/// fto_poly2d_init(poly, 3, /* x^2*y */ 1.0, 2, 1, /* 3.5*x*y^2 */ 3.5, 1, 2, /* 1.5*y^3 */ 1.5, 0, 3)
+/// @endcode
+/// @param poly the polynomial to initialize.
+/// @param num_elements number of elements of the polynomial
+/// @param ... specification of the polynomial
+/// @return status code
 extern enum FtoError fto_poly2d_init(struct FtoPoly2D *poly, int num_elements, ...);
 extern double fto_poly2d_eval(const struct FtoPoly2D *poly, double pt_x, double pt_y);
 extern enum FtoError fto_poly2d_diff(

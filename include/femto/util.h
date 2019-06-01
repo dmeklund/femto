@@ -47,6 +47,7 @@ extern enum FtoError fto_assert_fail(const char *err_msg, ...);
 extern enum FtoError fto_assert_nonnegative(int val);
 extern enum FtoError fto_assert_lessThan(int val1, int val2);
 extern enum FtoError fto_assert_greaterThanEqual(int val1, int val2);
+extern enum FtoError fto_assert_int_equal(int val1, int val2);
 extern bool fto_assertClose(double val1, double val2, double rtol, double atol);
 extern enum FtoError fto_assert_notNull(const void *ptr);
 

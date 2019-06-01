@@ -10,6 +10,9 @@ endif()
 
 message(${CMAKE_C_COMPILER_ID})
 
+find_package(Doxygen)
+doxygen_add_docs(doxygen include)
+
 set(
         SOURCE_FILES
         src/basis/piecewise_poly.c
@@ -71,6 +74,8 @@ set(
         test/basis/test_piecewise_poly.h
         test/basis/test_set.c
         test/basis/test_set.h
+        test/calc/test_diff.c
+        test/calc/test_diff.h
         test/fem/test_solver.c
         test/fem/test_stiffness.c
         test/fem/test_stiffness.h

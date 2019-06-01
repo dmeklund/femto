@@ -155,3 +155,13 @@ extern enum FtoError fto_assert_notNull(const void *ptr)
     }
     return FTO_OK;
 }
+
+
+extern enum FtoError fto_assert_int_equal(int val1, int val2)
+{
+    if (val1 != val2)
+    {
+        return fto_err_set(FTO_ASSERTION_FAILED, "%d != %d", val1, val2);
+    }
+    return FTO_OK;
+}
