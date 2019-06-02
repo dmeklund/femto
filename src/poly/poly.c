@@ -307,3 +307,11 @@ extern bool fto_poly2d_isEqual(struct FtoPoly2D *poly1, struct FtoPoly2D *poly2)
     }
     return true;
 }
+
+
+extern struct FtoPoly2D* fto_poly2d_zero()
+{
+    struct FtoPoly2D *poly = fto_malloc(sizeof *poly);
+    poly->num_elements = 0;
+    return poly;
+}

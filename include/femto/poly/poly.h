@@ -28,6 +28,7 @@ struct FtoPoly2D
 extern enum FtoError fto_poly1d_init(struct FtoPoly1D *poly, int order, ...);
 extern double fto_poly1d_eval(const struct FtoPoly1D *poly, double pt_x);
 extern enum FtoError fto_poly1d_diff(const struct FtoPoly1D *poly, struct FtoPoly1D *diff_poly_out);
+extern struct FtoPoly2D* fto_poly2d_zero();
 
 /// @brief Initialize a two dimensional polynomial.
 /// There must be 3*num_elements varargs arguments passed into this function. For each element,

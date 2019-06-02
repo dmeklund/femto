@@ -23,7 +23,7 @@ enum FtoFunctionType
 struct FtoGenericFunc
 {
     enum FtoFunctionType type;
-    const void *state;
+    void *state;
 };
 
 struct Fto1DFunction
